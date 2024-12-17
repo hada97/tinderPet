@@ -1,5 +1,6 @@
 package com.mvp.tinderpet.domain.user;
 
+import com.mvp.tinderpet.domain.dog.Dog;  // Importando a classe Dog para usar no relacionamento
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,12 +9,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
-@Table(name = "users")  // Especifica o nome da tabela
-@NoArgsConstructor  // Gera um construtor sem argumentos
-@AllArgsConstructor  // Gera um construtor com todos os argumentos
-@Builder  // Gera o padrão de construção com o builder
+@Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -31,4 +34,9 @@ public class User {
     @NotBlank
     private String phone;
 
+    @OneToMany(mappedBy = "user")  // Relacionamento bidirecional, mapeado pelo campo "user" em Dog
+    private List<Dog> dogs;
+
+    @NotBlank
+    private String address;  // Renomeei para seguir convenções de nomenclatura em Java
 }

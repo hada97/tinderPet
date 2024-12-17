@@ -1,5 +1,6 @@
 package com.mvp.tinderpet.controller;
 
+import com.mvp.tinderpet.domain.user.User;
 import com.mvp.tinderpet.domain.user.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/users")
