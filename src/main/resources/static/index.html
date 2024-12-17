@@ -1,43 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="icon" href="./favicons/favicon-16x16.png">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" href="favicon-16x16.png" />
+    <link rel="stylesheet" href="style.css" />
 
-    <script defer src="./js/script.js"></script>
+    <script defer src="script.js"></script>
 
-    <title>Pokedex</title>
-</head>
+    <title>Dog Info</title>
+  </head>
 
-<body>
-
+  <body>
     <main>
-        <img src="#" alt="pokemon" class="pokemon__image">
-        
-        <h1 class="pokemon__data">
-            <span class="pokemon__number"></span>
-            <span class="pokemon__name"></span>
+
+      <!-- Container da imagem do cachorro -->
+      <div class="dog__image-container">
+        <img src="#" alt="dog image" class="dog__image" style="display: none" />
+      </div>
+
+      <!-- Container das informações do cachorro -->
+      <div class="dog__info-container">
+        <h1 class="dog__data">
+          <span class="dog__number"></span>
+          <span class="dog__name"></span>
         </h1>
 
+        <div class="dog__details">
+          <p class="dog__description"></p>
+          <p class="dog__age"></p>
+          <p class="dog__breed"></p>
+          <p class="dog__size"></p>
+          <p class="dog__gender"></p>
+          <p class="dog__neutered"></p>
+        </div>
+      </div>
+
+      <div class="controle">
+  
         <form class="form">
-            <input 
-              type="search"
-              class="input__search"
-              placeholder="Name or Number"
-              required
-              />
+          <input
+            type="search"
+            class="input__search"
+            placeholder="Search by ID"
+            required
+          />
         </form>
 
+        <!-- Botões de navegação -->
         <div class="buttons">
-            <button class="button btn-prev">Prev 	&lt;</button>
-            <button class="button btn-next">Next 	&gt;</button>
+          <button class="button btn-prev">Prev &lt;</button>
+          <button class="button btn-next">Next &gt;</button>
         </div>
 
-        <img src="./images/pokedex.png" alt="pokedex" class="pokedex">
-    </main>
+      </div>
     
-</body>
-</html> 
+
+    </main>
+  </body>
+</html>
