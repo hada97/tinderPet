@@ -1,4 +1,4 @@
-package com.mvp.tinderpet.domain.user;
+package com.mvp.tinderpet.domain.dog;
 
 public enum Size {
     SMALL,

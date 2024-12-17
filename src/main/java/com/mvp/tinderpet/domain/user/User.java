@@ -1,6 +1,6 @@
 package com.mvp.tinderpet.domain.user;
 
-import com.mvp.tinderpet.domain.dog.Dog;  // Importando a classe Dog para usar no relacionamento
+import com.mvp.tinderpet.domain.dog.Dog;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Entity
@@ -32,9 +31,10 @@ public class User {
     private String email;
 
     @NotBlank
+    @Column(unique = true)
     private String phone;
 
-    @OneToMany(mappedBy = "user")  // Relacionamento bidirecional, mapeado pelo campo "user" em Dog
+    @OneToMany(mappedBy = "user")  // Carregar todos os cachorros imediatamente
     private List<Dog> dogs;
 
     @NotBlank
