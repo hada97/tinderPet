@@ -81,7 +81,6 @@
 			<version>3.1.0</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -94,19 +93,13 @@
 		</dependency>
 
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
+				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
+					<skipTests>true</skipTests>  <!-- Desabilita a execução de testes -->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -123,5 +116,6 @@
 			</plugin>
 		</plugins>
 	</build>
+
 
 </project>

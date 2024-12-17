@@ -4,10 +4,8 @@ import com.mvp.tinderpet.domain.dog.Dog;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.List;
 
 @Entity
@@ -16,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -39,4 +39,9 @@ public class User {
 
     @NotBlank
     private String address;  // Renomeei para seguir convenções de nomenclatura em Java
+
+    private Double latitude;  // Latitude do usuário
+
+    private Double longitude; // Longitude do usuário
+
 }

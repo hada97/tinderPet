@@ -39,11 +39,11 @@ public class UserController {
         return userService.getAll(page, size);
     }
 
-    @PostMapping
+
     @Transactional
-    public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
-        User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(savedUser);
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
     }
 
     @DeleteMapping("/{id}")
