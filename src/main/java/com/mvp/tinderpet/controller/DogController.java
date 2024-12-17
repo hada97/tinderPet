@@ -1,8 +1,6 @@
 package com.mvp.tinderpet.controller;
 
-import com.mvp.tinderpet.domain.dog.Dog;
-import com.mvp.tinderpet.domain.dog.DogRepository;
-import com.mvp.tinderpet.domain.dog.DogService;
+import com.mvp.tinderpet.domain.dog.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,11 +43,10 @@ public class DogController {
     }
 
 
-
     @PostMapping
-    public ResponseEntity<Dog> createDog(@Valid @RequestBody Dog dog) {
-        Dog createdDog = dogService.createDog(dog);
-        return new ResponseEntity<>(createdDog, HttpStatus.CREATED);
+    public ResponseEntity<DogDetailDTO> createDog(@Valid @RequestBody DogDTO dados) {
+        var dto = dogService.createDog(dados);
+        return ResponseEntity.ok(dto);
     }
 
 

@@ -1,5 +1,6 @@
 package com.mvp.tinderpet.domain.dog;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;  // Importar para evitar a serialização recursiva
 import com.mvp.tinderpet.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -9,12 +10,10 @@ import lombok.*;
 
 @Entity
 @Data
-@Table(name = "dogs")  // Especifica o nome da tabela
-@NoArgsConstructor  // Gera um construtor sem argumentos
-@AllArgsConstructor  // Gera um construtor com todos os argumentos
-@Builder  // Gera o padrão de construção com o builder
-@Getter
-@Setter
+@Table(name = "dogs")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Dog {
 
     @Id
@@ -25,10 +24,10 @@ public class Dog {
     private String name;
 
     @NotBlank
-    private String breed;  // A palavra "raca"
+    private String breed;  // "raca"
 
     @Positive
-    private int age;  // Melhor usar um inteiro para idade, que permite cálculos e comparações
+    private int age;
 
     @Enumerated(EnumType.STRING)
     private Sex gender;
@@ -40,14 +39,11 @@ public class Dog {
 
     private String description;
 
-    @NotBlank
-    private String location;
-
     @NotNull(message = "A informação de castração é obrigatória")
     private boolean isNeutered;  // Informação se o cão é castrado
 
-    @ManyToOne  // Cada Dog único User
-    @JoinColumn(name = "user_id")  // Coluna que faz a chave estrangeira para a tabela User
+    @ManyToOne
+    @JoinColumn(name = "user_id")  // Coluna que faz a chave estrangeira
+    @JsonIgnore  // Evita que o usuário seja serializado ao serializar o Dog
     private User user;
-
 }

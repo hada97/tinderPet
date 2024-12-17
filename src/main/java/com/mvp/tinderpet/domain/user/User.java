@@ -1,6 +1,7 @@
 package com.mvp.tinderpet.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mvp.tinderpet.domain.dog.Dog;
 import jakarta.persistence.*;
@@ -36,7 +37,8 @@ public class User {
     @Column(unique = true)
     private String phone;
 
-    @OneToMany(mappedBy = "user")  // Carregar todos os cachorros imediatamente
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore  // Evita que a lista de dogs seja serializada quando um User for retornado
     private List<Dog> dogs;
 
     @NotBlank
