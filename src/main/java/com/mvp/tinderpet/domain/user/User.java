@@ -1,5 +1,7 @@
 package com.mvp.tinderpet.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mvp.tinderpet.domain.dog.Dog;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -43,5 +45,6 @@ public class User {
     private Double latitude;  // Latitude do usuário
 
     private Double longitude; // Longitude do usuário
+
 
 }

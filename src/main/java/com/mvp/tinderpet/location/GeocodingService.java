@@ -31,7 +31,9 @@ public class GeocodingService {
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 // Parse da resposta JSON para extrair as coordenadas
+                System.out.println("======DEU CERTO ======");
                 return parseCoordinates(response.getBody());
+
             } else {
                 throw new RuntimeException("Erro na requisição: " + response.getStatusCode());
             }
