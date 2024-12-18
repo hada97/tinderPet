@@ -12,7 +12,6 @@ const dogBreed = document.querySelector('.dog__breed');
 const dogSize = document.querySelector('.dog__size');
 const dogGender = document.querySelector('.dog__gender');
 const dogNeutered = document.querySelector('.dog__neutered');
-
 const form = document.querySelector('.form');
 const input = document.querySelector('.input__search');
 const buttonPrev = document.querySelector('.btn-prev');
@@ -115,7 +114,7 @@ document
   .getElementById("dogForm")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
-    
+
     // Obtendo os valores do formulário
     const name = document.getElementById("name").value;
     const age = parseInt(document.getElementById("age").value); // Convertendo para número inteiro
