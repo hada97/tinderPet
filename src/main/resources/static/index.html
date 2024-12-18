@@ -9,6 +9,22 @@
     <title>Dog</title>
   </head>
   <body>
+    <!-- Barra de navegação com o nome do usuário e botão de logout -->
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/profile">Perfil</a></li>
+
+          <li>
+            <span id="user-name"></span>
+          </li>
+
+          <li><button onclick="logout()">Sair</button></li>
+        </ul>
+      </nav>
+    </header>
+
     <div class="main-container">
       <!-- Container lateral para adicionar um novo cachorro -->
       <div class="add-container">
@@ -74,12 +90,11 @@
         </div>
 
         <div class="dog__info-container">
-          <h1 class="dog__data">
-            <span class="dog__number"></span>
-            <span class="dog__name"></span>
-          </h1>
-
           <div class="dog__details">
+            <h1 class="dog__data">
+              <span class="dog__number"></span>
+              <span class="dog__name"></span>
+            </h1>
             <p class="dog__description"></p>
             <p class="dog__age"></p>
             <p class="dog__breed"></p>
@@ -90,7 +105,6 @@
         </div>
 
         <div class="controle">
-          
           <form class="form">
             <input
               type="search"
@@ -111,13 +125,32 @@
             <button class="button btn-next">Next &gt;</button>
           </div>
         </div>
-
       </div>
 
       <div class="preloader hidden" id="preloader">
         <div class="loader" id="loader"></div>
       </div>
-      
     </div>
+
+    <script>
+      // Função para fazer logout
+      function logout() {
+        // Implementação do logout aqui (por exemplo, limpar sessionStorage ou redirecionar)
+        alert("Você saiu!");
+        // Redirecionar para a página de login
+        window.location.href = "/login";
+      }
+
+      fetch("http://localhost:8080/api/user/profile")
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("user-name").innerText = data.name;
+        })
+        .catch((error) => {
+          console.error("Erro ao carregar o nome do usuário:", error);
+          document.getElementById("user-name").innerText =
+            "Erro ao carregar o nome";
+        });
+    </script>
   </body>
 </html>
