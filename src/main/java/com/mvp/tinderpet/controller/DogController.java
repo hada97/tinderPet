@@ -21,12 +21,6 @@ public class DogController {
     private DogRepository dogRepository;
 
     @GetMapping
-    public ResponseEntity<List<Dog>> getAllUsers() {
-        List<Dog> dogs = dogRepository.findAll();
-        return ResponseEntity.ok(dogs);
-    }
-
-    @GetMapping("/page")
     public Page<Dog> getDriversDisponiveis(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
