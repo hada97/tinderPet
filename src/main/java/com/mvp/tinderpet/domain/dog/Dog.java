@@ -5,7 +5,7 @@ import com.mvp.tinderpet.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 @Entity
@@ -26,7 +26,7 @@ public class Dog {
     @NotBlank
     private String breed;  // "raca"
 
-    @Positive
+    @PositiveOrZero
     private int age;
 
     @Enumerated(EnumType.STRING)
