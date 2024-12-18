@@ -1,6 +1,10 @@
 const baseUrl = "http://localhost:8080";
 const apiUrlCachorros = `${baseUrl}/dogs`;
 
+// Pega o token de autenticação armazenado no localStorage
+const token = localStorage.getItem('authToken');
+
+// Elementos do DOM
 const dogName = document.querySelector(".dog__name");
 const dogNumber = document.querySelector(".dog__number");
 const dogImage = document.querySelector(".dog__image");
@@ -14,17 +18,24 @@ const form = document.querySelector(".form");
 const input = document.querySelector(".input__search");
 const buttonPrev = document.querySelector(".btn-prev");
 const buttonNext = document.querySelector(".btn-next");
+const addIcon = document.getElementById("addIcon");
+const addForm = document.getElementById("addForm");
 
+// Variável para controlar a busca do cachorro
 let searchDog = 1;
 
-const fetchDog = async (dog) => {
-  const APIResponse = await fetch(`http://localhost:8080/dogs/${searchDog}`);
+// Função para buscar um cachorro específico
+const fetchDog = async (dogId) => {
+  const APIResponse = await fetch(`http://localhost:8080/dogs/${dogId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`, // Envia o token no cabeçalho
+    }
+  });
 
   if (APIResponse.status === 200) {
     const data = await APIResponse.json();
     return data;
   } else {
-    // Se o status não for 200, vamos retornar um cachorro fictício com dados padrão
     return {
       name: "Pit",
       id: "0",
@@ -34,12 +45,13 @@ const fetchDog = async (dog) => {
       size: "Medium",
       gender: "Unknown",
       neutered: false,
-      profilePictureUrl: "default.png", // Caminho para a imagem padrão
+      profilePictureUrl: "default.png",
     };
   }
 };
 
-const renderDog = async (dog) => {
+// Função para renderizar o cachorro
+const renderDog = async (dogId) => {
   dogName.innerHTML = "Loading...";
   dogDescription.innerHTML = "";
   dogAge.innerHTML = "";
@@ -48,16 +60,14 @@ const renderDog = async (dog) => {
   dogGender.innerHTML = "";
   dogNeutered.innerHTML = "";
 
-  const data = await fetchDog(dog);
+  const data = await fetchDog(dogId);
 
   if (data) {
     dogImage.style.display = "block";
     dogName.innerHTML = data.name;
-
     if (dogNumber) {
       dogNumber.innerHTML = `ID: ${data.id}`;
     }
-
     dogDescription.innerHTML = `Description: ${data.description}`;
     dogAge.innerHTML = `Age: ${data.age} years`;
     dogBreed.innerHTML = `Breed: ${data.breed}`;
@@ -82,11 +92,13 @@ const renderDog = async (dog) => {
   }
 };
 
+// Lidar com o envio do formulário de busca
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   renderDog(input.value.toLowerCase());
 });
 
+// Navegação entre os cachorros
 buttonPrev.addEventListener("click", () => {
   if (searchDog > 1) {
     searchDog -= 1;
@@ -99,94 +111,86 @@ buttonNext.addEventListener("click", () => {
   renderDog(searchDog);
 });
 
+// Inicializar a exibição do cachorro
 renderDog(searchDog);
 
 // Lógica para alternar entre o ícone de adicionar e o formulário
-const addIcon = document.getElementById("addIcon");
-const addForm = document.getElementById("addForm");
-
 addIcon.addEventListener("click", () => {
-  addIcon.style.display = "none"; // Esconde o ícone
-  addForm.style.display = "block"; // Exibe o formulário
+  addIcon.style.display = "none";
+  addForm.style.display = "block";
 });
 
-document
-  .getElementById("dogForm")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault();
+// Lidar com o envio do formulário de cadastro de cachorro
+document.getElementById("dogForm").addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    // Obtendo os valores do formulário
-    const name = document.getElementById("name").value;
-    const age = parseInt(document.getElementById("age").value); // Convertendo para número inteiro
-    const breed = document.getElementById("breed").value;
-    const gender = document.getElementById("gender").value;
-    const size = document.getElementById("size").value;
-    const profilePictureUrl =
-      document.getElementById("profilePictureUrl").value;
-    const description = document.getElementById("description").value;
-    const isNeutered = document.getElementById("isNeutered").checked;
-    const userId = document.getElementById("userId").value;
+  const name = document.getElementById("name").value;
+  const age = parseInt(document.getElementById("age").value);
+  const breed = document.getElementById("breed").value;
+  const gender = document.getElementById("gender").value;
+  const size = document.getElementById("size").value;
+  const profilePictureUrl = document.getElementById("profilePictureUrl").value;
+  const description = document.getElementById("description").value;
+  const isNeutered = document.getElementById("isNeutered").checked;
+  const userId = document.getElementById("userId").value;
 
-    // Verificando se todos os campos obrigatórios foram preenchidos e se a idade é válida
-    if (
-      !name ||
-      !breed ||
-      !gender ||
-      !size ||
-      !profilePictureUrl ||
-      !userId ||
-      isNaN(age) ||
-      age < 0
-    ) {
-      alert(
-        "Please fill out all fields correctly, especially the age (it cannot be negative)."
-      );
-      return;
+  if (
+    !name ||
+    !breed ||
+    !gender ||
+    !size ||
+    !profilePictureUrl ||
+    !userId ||
+    isNaN(age) ||
+    age < 0
+  ) {
+    alert("Please fill out all fields correctly.");
+    return;
+  }
+
+  try {
+    const response = await fetch(apiUrlCachorros, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`, // Envia o token de autenticação
+      },
+      body: JSON.stringify({
+        name,
+        age,
+        breed,
+        gender,
+        size,
+        profilePictureUrl,
+        description,
+        isNeutered,
+        userId,
+      }),
+    });
+
+    if (response.ok) {
+      alert("Dog successfully registered!");
+      document.getElementById("dogForm").reset();
+      document.getElementById("addForm").style.display = "none";
+    } else {
+      const data = await response.json();
+      alert("Error: " + data.message);
     }
-
-    try {
-      const response = await fetch(apiUrlCachorros, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          age,
-          breed,
-          gender,
-          size,
-          profilePictureUrl,
-          description,
-          isNeutered,
-          userId,
-        }),
-      });
-
-      if (response.ok) {
-        alert("Dog successfully registered!");
-        document.getElementById("dogForm").reset();
-        document.getElementById("addForm").style.display = "none"; // Fechar o formulário após sucesso
-      } else {
-        const data = await response.json();
-        alert("Error: " + data.message);
-      }
-    } catch (error) {
-      alert(
-        "An error occurred while trying to register the dog: " + error.message
-      );
-    }
-  });
+  } catch (error) {
+    alert("An error occurred while trying to register the dog: " + error.message);
+  }
+});
 
 // Função para mostrar ou esconder o loader
 function toggleLoader(show) {
   const preloader = document.getElementById("preloader");
   const loader = document.getElementById("loader");
   if (show) {
-    preloader.style.display = "flex"; // Exibe o loader
-    loader.style.display = "block"; // Exibe o loader animado
+    preloader.style.display = "flex";
+    loader.style.display = "block";
   } else {
-    preloader.style.display = "none"; // Esconde o loader
-    loader.style.display = "none"; // Esconde a animação
+    preloader.style.display = "none";
+    loader.style.display = "none";
   }
 }
+

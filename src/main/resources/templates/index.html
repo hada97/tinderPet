@@ -92,7 +92,6 @@
         <div class="dog__info-container">
           <div class="dog__details">
             <h1 class="dog__data">
-    
               <span class="dog__name"></span>
             </h1>
             <p class="dog__description"></p>
@@ -134,20 +133,24 @@
 
     <script>
       function logout() {
-        alert("Você saiu!");
+         alert("Você saiu!");
+         window.location.href = "/login";
+     }
 
-        window.location.href = "/login";
-      }
-      fetch("http://localhost:8080/api/user/profile")
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById("user-name").innerText = data.name;
-        })
-        .catch((error) => {
-          console.error("Erro ao carregar o nome do usuário:", error);
-          document.getElementById("user-name").innerText =
-            "Erro ao carregar o nome";
-        });
+     fetch("http://localhost:8080/api/user/profile", {
+         headers: {
+             Authorization: `Bearer ${token}`, // Envia o token no cabeçalho
+         },
+     })
+         .then((response) => response.json())
+         .then((data) => {
+             document.getElementById("user-name").innerText = data.name;
+         })
+         .catch((error) => {
+             console.error("Erro ao carregar o nome do usuário:", error);
+             document.getElementById("user-name").innerText = "Erro ao carregar o nome";
+         });
+
     </script>
   </body>
 </html>
