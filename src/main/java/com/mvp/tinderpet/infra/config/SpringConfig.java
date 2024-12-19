@@ -12,14 +12,29 @@ public class SpringConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/", "/login").permitAll();
+
+                    registry.requestMatchers("/", "/login", "/users/register").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2login -> {
                     oauth2login
-                            .loginPage("/login")
-                            .successHandler((request, response, authentication) -> response.sendRedirect("/index"));
+                            .loginPage("/login")  // Página de login personalizada
+                            .successHandler((request, response, authentication) -> response.sendRedirect("/index"));  // Redirecionamento após login bem-sucedido
                 })
                 .build();
     }
 }
+
+
+/*
+@Bean
+public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception { return http
+.authorizeHttpRequests (registry -> {
+}
+registry.requestMatchers("/"). permitAll();
+registry.anyRequest().authenticated();
+})
+.oauth2Login(Customizer.withDefaults())
+.formLogin(Customizer.withDefaults())
+.build();
+ */

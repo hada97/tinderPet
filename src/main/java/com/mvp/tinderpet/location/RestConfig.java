@@ -12,4 +12,5 @@ public class RestConfig {
         return new RestTemplate();
     }
 }
+
 //GET http://localhost:8080/geocode?endereco1=New+York&endereco2=Los+Angeles

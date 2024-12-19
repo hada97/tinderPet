@@ -12,9 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DogDTO {
-
-    private Long id;
+public class DogDto {
 
     @NotBlank
     private String name;
@@ -25,8 +23,10 @@ public class DogDTO {
     @Positive
     private int age;
 
+    @NotBlank
     private Sex gender;
 
+    @NotBlank
     private Size size;
 
     private String profilePictureUrl;

@@ -1,7 +1,7 @@
 package com.mvp.tinderpet.domain.dog;
 
-public record DogDetailDTO(
-        Long id,
+public record DogDetail(
+
         String name,
         String breed,
         int age,
@@ -13,9 +13,8 @@ public record DogDetailDTO(
         Long userId
 ) {
 
-    public DogDetailDTO(Dog dog) {
+    public DogDetail(Dog dog) {
         this(
-                dog.getId(),
                 dog.getName(),
                 dog.getBreed(),
                 dog.getAge(),

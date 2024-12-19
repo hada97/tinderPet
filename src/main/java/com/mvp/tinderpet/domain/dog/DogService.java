@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.NoSuchElementException;
 
 @Service
@@ -24,7 +23,6 @@ public class DogService {
 
     @Autowired
     private UserRepository userRepository;
-
 
 
     @Cacheable(value = "dogs")
@@ -42,7 +40,7 @@ public class DogService {
 
     @Transactional
     @CacheEvict(value = "dogs", key = "#result.id")
-    public DogDetailDTO createDog(DogDTO dados) {
+    public DogDetail createDog(DogDto dados) {
 
         User user = userRepository.findById(dados.getUserId())
                 .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
@@ -59,7 +57,7 @@ public class DogService {
         dog.setUser(user);
         dogRepository.save(dog);
 
-        return new DogDetailDTO(dog);
+        return new DogDetail(dog);
     }
 
     @Transactional
@@ -67,8 +65,7 @@ public class DogService {
     public Dog updateDog(Long id, Dog dog) {
         Dog dogEntity = dogRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cão não encontrado com ID: " + id));
-        Dog updatedDog = dogRepository.save(dogEntity);
-        return updatedDog;
+        return dogRepository.save(dogEntity);
     }
 
 

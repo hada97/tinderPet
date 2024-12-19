@@ -1,6 +1,7 @@
 package com.mvp.tinderpet.controller;
 
 import com.mvp.tinderpet.domain.dog.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,10 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/dogs")
+@SecurityRequirement(name = "bearer-key")
 public class DogController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class DogController {
     private DogRepository dogRepository;
 
     @GetMapping
-    public Page<Dog> getDriversDisponiveis(
+    public Page<Dog> getDogs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return dogService.getAllDogs(page, size);
@@ -38,7 +38,7 @@ public class DogController {
 
 
     @PostMapping
-    public ResponseEntity<DogDetailDTO> createDog(@Valid @RequestBody DogDTO dados) {
+    public ResponseEntity<DogDetail> createDog(@Valid @RequestBody DogDto dados) {
         var dto = dogService.createDog(dados);
         return ResponseEntity.ok(dto);
     }

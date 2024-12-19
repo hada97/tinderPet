@@ -29,7 +29,7 @@ public class ViewController {
     @GetMapping("/index")
     public String index(OAuth2AuthenticationToken token, Model model) {
         model.addAttribute("name", token.getPrincipal().getAttribute("name"));
-        return "index";
+        return "index/index";
     }
 
     @GetMapping("/api/user/profile")

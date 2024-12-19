@@ -1,11 +1,7 @@
 package com.mvp.tinderpet.controller;
 
-import com.mvp.tinderpet.domain.dog.Dog;
-import com.mvp.tinderpet.domain.dog.DogRepository;
-import com.mvp.tinderpet.domain.dog.DogService;
-import com.mvp.tinderpet.domain.user.User;
-import com.mvp.tinderpet.domain.user.UserRepository;
-import com.mvp.tinderpet.domain.user.UserService;
+import com.mvp.tinderpet.domain.user.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
+@SecurityRequirement(name = "bearer-key")
 public class UserController {
 
     @Autowired
@@ -33,25 +30,21 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    public Page<User> getDriversDisponiveis(
+    public Page<User> getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return userService.getAll(page, size);
     }
 
-
-    @Transactional
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @PostMapping("/register")
+    public UserDetail createUser(@RequestBody @Valid UserDto userDto) {
+        return userService.createUser(userDto);
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            userRepository.delete(user.get());
+        boolean isDeleted = userService.deleteUser(id);
+        if (isDeleted) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
