@@ -24,7 +24,7 @@ public class Dog {
     private String name;
 
     @NotBlank
-    private String breed;  // "raca"
+    private String breed;
 
     @PositiveOrZero
     private int age;
@@ -35,12 +35,13 @@ public class Dog {
     @Enumerated(EnumType.STRING)
     private Size size;
 
-    private String profilePictureUrl;  // URL para a imagem
+    @NotBlank
+    private String profilePictureUrl;
 
     private String description;
 
     @NotNull(message = "A informação de castração é obrigatória")
-    private boolean isNeutered;  // Informação se o cão é castrado
+    private boolean isNeutered;
 
     @ManyToOne
     @JoinColumn(name = "user_id")  // Coluna que faz a chave estrangeira

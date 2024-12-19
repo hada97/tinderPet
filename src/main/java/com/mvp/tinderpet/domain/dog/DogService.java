@@ -56,7 +56,6 @@ public class DogService {
         dog.setNeutered(dados.isNeutered());
         dog.setUser(user);
         dogRepository.save(dog);
-
         return new DogDetail(dog);
     }
 

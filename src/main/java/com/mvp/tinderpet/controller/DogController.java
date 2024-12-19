@@ -38,8 +38,8 @@ public class DogController {
 
 
     @PostMapping
-    public ResponseEntity<DogDetail> createDog(@Valid @RequestBody DogDto dados) {
-        var dto = dogService.createDog(dados);
+    public ResponseEntity<DogDetail> createDog(@Valid @RequestBody DogDto dogDto) {
+        var dto = dogService.createDog(dogDto);
         return ResponseEntity.ok(dto);
     }
 

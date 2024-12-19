@@ -23,12 +23,11 @@ public class DogDto {
     @Positive
     private int age;
 
-    @NotBlank
     private Sex gender;
 
-    @NotBlank
     private Size size;
 
+    @NotBlank
     private String profilePictureUrl;
 
     private String description;

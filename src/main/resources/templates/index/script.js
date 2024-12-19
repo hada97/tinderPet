@@ -121,65 +121,65 @@ addIcon.addEventListener("click", () => {
 });
 
 // Lidar com o envio do formulário de cadastro de cachorro
-document.getElementById("dogForm").addEventListener("submit", async function (event) {
-  event.preventDefault();
+document
+  .getElementById("dogForm")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-  const name = document.getElementById("name").value;
-  const age = parseInt(document.getElementById("age").value);
-  const breed = document.getElementById("breed").value;
-  const gender = document.getElementById("gender").value;
-  const size = document.getElementById("size").value;
-  const profilePictureUrl = document.getElementById("profilePictureUrl").value;
-  const description = document.getElementById("description").value;
-  const isNeutered = document.getElementById("isNeutered").checked;
-  const userId = document.getElementById("userId").value;
+    // Obtendo os valores do formulário
+    const name = document.getElementById("name").value;
+    const age = parseInt(document.getElementById("age").value); // Convertendo para número inteiro
+    const breed = document.getElementById("breed").value;
+    const gender = document.getElementById("gender").value;
+    const size = document.getElementById("size").value;
+    const profilePictureUrl =
+      document.getElementById("profilePictureUrl").value;
+    const description = document.getElementById("description").value;
+    const isNeutered = document.getElementById("isNeutered").checked;
+    const userId = document.getElementById("userId").value;
 
-  if (
-    !name ||
-    !breed ||
-    !gender ||
-    !size ||
-    !profilePictureUrl ||
-    !userId ||
-    isNaN(age) ||
-    age < 0
-  ) {
-    alert("Please fill out all fields correctly.");
-    return;
-  }
+    const token = localStorage.getItem("access_token");
 
-  try {
-    const response = await fetch(apiUrlCachorros, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, // Envia o token de autenticação
-      },
-      body: JSON.stringify({
-        name,
-        age,
-        breed,
-        gender,
-        size,
-        profilePictureUrl,
-        description,
-        isNeutered,
-        userId,
-      }),
-    });
-
-    if (response.ok) {
-      alert("Dog successfully registered!");
-      document.getElementById("dogForm").reset();
-      document.getElementById("addForm").style.display = "none";
-    } else {
-      const data = await response.json();
-      alert("Error: " + data.message);
+    if (!token) {
+      alert("Authentication token is missing.");
+      return;
     }
-  } catch (error) {
-    alert("An error occurred while trying to register the dog: " + error.message);
-  }
-});
+
+    try {
+      const response = await fetch(apiUrlCachorros, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Adicionando o token no cabeçalho
+        },
+        body: JSON.stringify({
+          name,
+          age,
+          breed,
+          gender,
+          size,
+          profilePictureUrl,
+          description,
+          isNeutered,
+          userId,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Dog successfully registered!");
+        document.getElementById("dogForm").reset();
+        document.getElementById("addForm").style.display = "none"; // Fechar o formulário após sucesso
+      } else {
+        const data = await response.json();
+        alert("Error: " + data.message);
+      }
+    } catch (error) {
+      alert(
+        "An error occurred while trying to register the dog: " + error.message
+      );
+    }
+  });
+
 
 // Função para mostrar ou esconder o loader
 function toggleLoader(show) {
