@@ -24,7 +24,7 @@ public class DogController {
     public Page<Dog> getDogs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return dogService.getAllDogs(page, size);
+        return dogService.getDogs(page, size);
     }
 
     @GetMapping("/{id}")

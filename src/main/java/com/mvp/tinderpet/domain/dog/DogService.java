@@ -26,20 +26,18 @@ public class DogService {
 
 
     @Cacheable(value = "dogs")
-    public Page<Dog> getAllDogs(int page, int size) {
+    public Page<Dog> getDogs(int page, int size) {
         Pageable pageRequest = PageRequest.of(page, size);
         return dogRepository.findAll(pageRequest);
     }
 
-
-    @Cacheable(value = "dogs", key = "#id")
     public Dog getDogById(Long id) {
         return dogRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cão não encontrado com ID: " + id));
     }
 
     @Transactional
-    @CacheEvict(value = "dogs", key = "#result.id")
+    @CacheEvict(value = "dogs")
     public DogDetail createDog(DogDto dados) {
 
         User user = userRepository.findById(dados.getUserId())
@@ -69,7 +67,7 @@ public class DogService {
 
 
     @Transactional
-    @CacheEvict(value = "dogs", key = "#id")
+    @CacheEvict(value = "dogs")
     public ResponseEntity<?> deleteDog(Long id) {
         Dog dogEntity = dogRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cão não encontrado com ID: " + id));

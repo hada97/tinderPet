@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="favicon-16x16.png" />
-    <link rel="stylesheet" href="style.css" />
-    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="/index/style.css" />
+    <script defer src="/index/script.js"></script>
+
     <title>Dog</title>
   </head>
   <body>
@@ -130,27 +131,5 @@
         <div class="loader" id="loader"></div>
       </div>
     </div>
-
-    <script>
-      function logout() {
-         alert("Você saiu!");
-         window.location.href = "/login";
-     }
-
-     fetch("http://localhost:8080/api/user/profile", {
-         headers: {
-             Authorization: `Bearer ${token}`, // Envia o token no cabeçalho
-         },
-     })
-         .then((response) => response.json())
-         .then((data) => {
-             document.getElementById("user-name").innerText = data.name;
-         })
-         .catch((error) => {
-             console.error("Erro ao carregar o nome do usuário:", error);
-             document.getElementById("user-name").innerText = "Erro ao carregar o nome";
-         });
-
-    </script>
   </body>
 </html>
