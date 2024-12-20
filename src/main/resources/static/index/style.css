@@ -11,7 +11,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(41, 41, 41);
+  background-color: #f8d7d7;
+  background: linear-gradient(to right, #777777, #c9c9c9);
   min-height: 100vh;
   text-align: center;
 }
@@ -37,6 +38,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
+
 .dog__image {
   width: 100%;
   height: 100%;
@@ -47,10 +49,10 @@ body {
 
 .dog__info-container {
   display: flex;
-  flex-direction: column; /* Empilha os itens na vertical */
-  justify-content: flex-start; /* Alinha os itens do topo para baixo */
-  align-items: center; /* Alinha o conteúdo horizontalmente no centro */
-  text-align: center; /* Mantém o texto alinhado no centro */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
   width: 100%;
 }
 
@@ -65,8 +67,8 @@ body {
   font-weight: 600;
   color: #3a444d;
   font-size: clamp(14px, 6vw, 25px);
-  margin: 0; /* Remove o espaçamento superior e inferior */
-  padding: 5px 0; /* Controla o espaçamento interno */
+  margin: 0;
+  padding: 5px 0;
 }
 
 .dog__name,
@@ -118,8 +120,8 @@ body {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 300px; /* Limite de largura para o container */
-  margin: 0 auto; /* Centraliza o container */
+  max-width: 300px;
+  margin: 0 auto;
   padding: 10px;
 }
 
@@ -192,7 +194,6 @@ body {
   background-color: #7e7e7e;
 }
 
-/* Add Icon Styles */
 .add-icon {
   width: 50px;
   height: 50px;
@@ -214,6 +215,24 @@ body {
   border: 2px solid #888;
 }
 
+.bottom-container {
+  position: fixed;
+  left: 50%;
+  bottom: 0; /* Fixa no rodapé */
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  background-color: transparent;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  font-size: 0.9em;
+  box-sizing: border-box;
+  max-height: 35px;
+}
+
+
 .preloader {
   position: fixed;
   top: 0;
@@ -226,7 +245,7 @@ body {
 
 .loader {
   border: 12px solid #efeee8;
-  border-top: 12px solid #0032a0; /* Change the preloader color here */
+  border-top: 12px solid #0032a0;
   border-radius: 50%;
   width: 120px;
   height: 120px;
@@ -276,57 +295,58 @@ body {
   display: none;
 }
 
-/* Barra de navegação (Header) */
 header {
-  background-color: #000000; /* Fundo branco */
-  padding: 5px 20px;
-  position: fixed; /* Fixa a barra no topo */
+  background-color: #000000;
+  padding: 5px 15px;
+  position: fixed;
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1000; /* Garante que a barra fique no topo */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para dar profundidade */
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  justify-content: flex-end; /* Alinha os itens à direita */
+  justify-content: flex-end;
   align-items: center;
   margin: 0;
 }
 
 nav ul li {
-  margin-left: 15px; /* Menos espaço entre os itens */
+  margin-left: 15px;
 }
 
 nav ul li a {
   text-decoration: none;
-  color: #ffffff; /* Cor do texto */
-  font-size: 14px; /* Menor tamanho de fonte */
+  color: #ffffff;
+  font-size: 14px;
   font-weight: bold;
 }
 
 nav ul li button {
-  background-color: #444; /* Cor vermelha para o botão de logout */
-  color: white; /* Texto branco */
+  display: flex;
+  background-color: #ffffff;
+  color: #000000;
   border: none;
-  padding: 8px 16px; /* Botão menor */
+  padding: 4px 12px;
   cursor: pointer;
-  font-size: 14px; /* Menor tamanho de fonte */
+  font-size: 14px;
   border-radius: 4px;
-  transition: background-color 0.3s; /* Transição suave ao passar o mouse */
+  transition: background-color 0.3s;
+  align-items: center;
 }
+
 
 nav ul li button:hover {
-  background-color: #838383; /* Cor de fundo mais escura ao passar o mouse */
+  background-color: #838383;
 }
 
-/* Estilo do título */
 h1 {
   text-align: center;
-  margin: 80px 0 20px; /* Ajustando o espaço acima para não sobrepor a barra fixa */
-  font-size: 20px; /* Tamanho de fonte menor */
+  margin: 80px 0 20px;
+  font-size: 20px;
   color: #ffffff;
 }
 
