@@ -353,3 +353,10 @@ h1 {
 #user-name {
   color: white;
 }
+
+.title-addform {
+  margin-bottom: 15px;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
