@@ -104,15 +104,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 85vh;
   max-width: 300px;
   overflow: auto;
   padding: 20px;
   box-sizing: border-box;
-  height: 80vh;
   padding: 20px;
   background-color: #f5f5f5;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 .controle {
