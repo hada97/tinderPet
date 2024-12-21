@@ -1,8 +1,11 @@
-package com.mvp.tinderpet.domain.dog;
+package com.mvp.tinderpet.service;
 
+import com.mvp.tinderpet.domain.dog.Dog;
+import com.mvp.tinderpet.domain.dog.DogDetail;
+import com.mvp.tinderpet.domain.dog.DogDto;
+import com.mvp.tinderpet.domain.dog.DogRepository;
 import com.mvp.tinderpet.domain.user.User;
 import com.mvp.tinderpet.domain.user.UserRepository;
-import com.mvp.tinderpet.domain.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -98,6 +101,12 @@ public class DogService {
         }
         dogRepository.delete(dogEntity);
         return ResponseEntity.noContent().build();
+    }
+
+
+    public Page<Dog> getDogsByUserId(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return dogRepository.findByUserId(userId, pageable);
     }
 
 

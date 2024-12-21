@@ -8,4 +8,6 @@ public interface DogRepository extends JpaRepository<Dog, Long> {
 
     Page<Dog> findAll(Pageable pageable);
 
+    Page<Dog> findByUserId(Long userId, Pageable pageable);
+
 }

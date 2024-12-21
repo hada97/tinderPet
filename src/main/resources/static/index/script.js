@@ -208,6 +208,7 @@ function logout() {
   window.location.href = "/";
 }
 
+
 fetch("http://localhost:8080/api/user/profile", {
   headers: {
     Authorization: `Bearer ${token}`,

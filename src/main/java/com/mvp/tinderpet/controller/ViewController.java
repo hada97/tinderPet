@@ -15,9 +15,7 @@ public class ViewController {
     @GetMapping("/profile")
     public String profile(OAuth2AuthenticationToken token, Model model) {
         model.addAttribute("name", token.getPrincipal().getAttribute("name"));
-        model.addAttribute("email", token.getPrincipal().getAttribute("email"));
-        model.addAttribute("photo", token.getPrincipal().getAttribute("picture"));
-        return "profile";
+        return "profile/profile";
     }
 
     @GetMapping("/")

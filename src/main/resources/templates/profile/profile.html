@@ -1,0 +1,75 @@
+<!-- base.php -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/profile/favicon-16x16.png" />
+    <link rel="stylesheet" href="/profile/style.css" />
+    <script defer src="/profile/script.js"></script>
+
+    <title>Perfil</title>
+</head>
+<body>
+<!-- Barra de navegação -->
+<header>
+    <nav>
+        <ul>
+            <li><a href="/index">Home</a></li>
+            <li><a href="/profile">Perfil</a></li>
+            <li>
+                <span id="user-name"></span>
+            </li>
+            <li><button onclick="logout()">Sair</button></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Conteúdo específico da página -->
+<div class="main-container">
+
+
+    <div class="dog-container">
+        <div class="dog__image-container">
+            <img
+                    src="#"
+                    alt="dog image"
+                    class="dog__image"
+                    style="display: none"
+            />
+        </div>
+
+        <div class="dog__info-container">
+            <div class="dog__details">
+                <h1 class="dog__data">
+                    <span class="dog__name"></span>
+                </h1>
+                <p class="dog__description"></p>
+                <p class="dog__age"></p>
+                <p class="dog__breed"></p>
+                <p class="dog__size"></p>
+                <p class="dog__gender"></p>
+                <p class="dog__neutered"></p>
+            </div>
+        </div>
+
+        <div class="control">
+            <form class="form">
+
+            </form>
+
+            <div class="buttons">
+
+            </div>
+
+        </div>
+
+</div>
+
+<!-- Rodapé -->
+<div class="bottom-container">
+    <p>© 2024 All rights reserved</p>
+</div>
+
+</body>
+</html>

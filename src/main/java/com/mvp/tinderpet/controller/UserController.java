@@ -1,6 +1,9 @@
 package com.mvp.tinderpet.controller;
 
+import com.mvp.tinderpet.domain.dog.Dog;
 import com.mvp.tinderpet.domain.user.*;
+import com.mvp.tinderpet.service.DogService;
+import com.mvp.tinderpet.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private DogService dogService;
 
     @GetMapping
     public Page<User> getUsers(
@@ -29,6 +34,17 @@ public class UserController {
             @RequestParam(defaultValue = "10") int size) {
         return userService.getAll(page, size);
     }
+
+    @GetMapping("/{id}/dogs")
+    public Page<Dog> getUsersDogs(
+            @PathVariable Long id, // Pega o ID do usuário
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        // Busca os cachorros do usuário com base no ID
+        return dogService.getDogsByUserId(id, page, size);
+    }
+
 
     // Endpoint de login via OAuth2 (após redirecionamento do Google)
     @GetMapping("/login/oauth2/code/google")

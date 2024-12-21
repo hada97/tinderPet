@@ -1,6 +1,9 @@
-package com.mvp.tinderpet.domain.user;
+package com.mvp.tinderpet.service;
 
 import com.mvp.tinderpet.domain.dog.DogRepository;
+import com.mvp.tinderpet.domain.user.User;
+import com.mvp.tinderpet.domain.user.UserDetail;
+import com.mvp.tinderpet.domain.user.UserRepository;
 import com.mvp.tinderpet.location.GeocodingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

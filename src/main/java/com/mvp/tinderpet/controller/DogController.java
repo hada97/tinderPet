@@ -1,6 +1,7 @@
 package com.mvp.tinderpet.controller;
 
 import com.mvp.tinderpet.domain.dog.*;
+import com.mvp.tinderpet.service.DogService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

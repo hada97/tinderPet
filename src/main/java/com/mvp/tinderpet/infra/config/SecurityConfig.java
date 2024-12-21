@@ -1,6 +1,6 @@
 package com.mvp.tinderpet.infra.config;
 
-import com.mvp.tinderpet.domain.user.UserService;
+import com.mvp.tinderpet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
