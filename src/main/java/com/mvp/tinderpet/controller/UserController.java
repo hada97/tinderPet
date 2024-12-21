@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 @RestController
 @RequestMapping("/users")
@@ -27,6 +29,26 @@ public class UserController {
             @RequestParam(defaultValue = "10") int size) {
         return userService.getAll(page, size);
     }
+
+    // Endpoint de login via OAuth2 (após redirecionamento do Google)
+    @GetMapping("/login/oauth2/code/google")
+    public ResponseEntity<UserDetail> loginWithGoogle(OAuth2AuthenticationToken authentication) {
+        OAuth2User oAuth2User = authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+
+        // Verifica se o usuário já está registrado
+        if (!userService.existsByEmail(email)) {
+            // Registra o usuário automaticamente
+            userService.registerNewUser(email, name);
+        }
+
+        // Cria o UserDetail com os dados do usuário
+        UserDetail userDetail = new UserDetail(name, null); // Aqui você pode adicionar outras informações
+
+        return ResponseEntity.ok(userDetail);
+    }
+
 
     @PostMapping("/register")
     public ResponseEntity<UserDetail> createUser(@RequestBody @Valid UserDto user) {
@@ -48,8 +70,12 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         boolean isDeleted = userService.deleteUser(id);
         if (isDeleted) {
-            return ResponseEntity.noContent().build();
+            // Redireciona para a página de sucesso após a exclusão
+            return ResponseEntity.status(302)
+                    .header("Location", "/custom_login.html")
+                    .build();
         }
+        // Se o usuário não for encontrado ou não for excluído, pode retornar um código 404 (não encontrado)
         return ResponseEntity.notFound().build();
     }
 

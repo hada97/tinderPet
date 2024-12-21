@@ -102,7 +102,6 @@ const fetchDogsPage = async (page, size) => {
 // Função para renderizar a navegação de cachorros
 const navigateDog = (direction) => {
   if (direction === "next") {
-    console.log("Cachorros carregados:", dogsList); // Verifique os cachorros carregados
 
     // Verificar se há mais cachorros na página atual
     if (currentDogIndex < dogsList.length - 1) {
@@ -134,8 +133,6 @@ const loadDogsPage = async () => {
   const pageData = await fetchDogsPage(currentPage, dogsPerPage);
   dogsList = pageData.content;
   totalPages = pageData.totalPages;  // Atribuir o número total de páginas
-  console.log("Cachorros carregados:", dogsList); // Verifique os cachorros carregados
-  currentDogIndex = 0;
   renderCurrentDog();
 };
 
