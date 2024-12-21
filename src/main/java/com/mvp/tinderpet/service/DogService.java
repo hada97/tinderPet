@@ -55,6 +55,9 @@ public class DogService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
 
+        if (user.getDogs().size() >= 5) {
+            throw new IllegalStateException("Limite de 5 cães atingido.");
+        }
         Dog dog = new Dog();
         dog.setName(dados.getName());
         dog.setBreed(dados.getBreed());
