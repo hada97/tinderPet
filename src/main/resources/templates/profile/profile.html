@@ -29,13 +29,16 @@
 <div class="main-container">
     <!-- Template de Card de Cachorro (será usado pelo JS) -->
     <template id="dog-form-template">
-        <div class="dog-card">
+        <div class="dog-container">
             <div class="dog__image-container">
-                <img class="dog__image" src="#" alt="Dog Image" />
+                <img src="#" alt="dog image" class="dog__image"/>
             </div>
+
             <div class="dog__info-container">
                 <div class="dog__details">
-                    <h2 class="dog__name"></h2>
+                    <h1 class="dog__data">
+                        <span class="dog__name"></span>
+                    </h1>
                     <p class="dog__description"></p>
                     <p class="dog__age"></p>
                     <p class="dog__breed"></p>
@@ -44,8 +47,15 @@
                     <p class="dog__neutered"></p>
                 </div>
             </div>
+
+            <!-- Botões de navegação -->
+            <div class="buttons">
+                <button class="button btn-prev">Prev &lt;</button>
+                <button class="button btn-next">Next &gt;</button>
+            </div>
         </div>
     </template>
+
 
     <!-- A área onde os cards dos cachorros serão renderizados -->
 </div>
