@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/profile/favicon-16x16.png" />
     <link rel="stylesheet" href="/profile/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script defer src="/profile/script.js"></script>
 
     <title>Perfil</title>
@@ -25,11 +26,11 @@
     </nav>
 </header>
 
-<!-- Conteúdo específico da página -->
 <div class="main-container">
-    <!-- Template de Card de Cachorro (será usado pelo JS) -->
+
+    <!-- base.php -->
     <template id="dog-form-template">
-        <div class="dog-container">
+        <div class="dog-container" data-id=""> <!-- Adicionando o atributo data-id -->
             <div class="dog__image-container">
                 <img src="#" alt="dog image" class="dog__image"/>
             </div>
@@ -48,19 +49,21 @@
                 </div>
             </div>
 
-            <!-- Botões de navegação -->
             <div class="buttons">
-                <button class="button btn-prev">Prev &lt;</button>
-                <button class="button btn-next">Next &gt;</button>
+                <button class="button btn-left">
+                    <i class="fas fa-trash"></i> DEL
+                </button>
+                <button class="button btn-right">
+                    <i class="fas fa-edit"></i> EDIT
+                </button>
             </div>
         </div>
     </template>
 
 
-    <!-- A área onde os cards dos cachorros serão renderizados -->
 </div>
 
-<!-- Rodapé -->
+
 <div class="bottom-container">
     <p>© 2024 All rights reserved</p>
 </div>
