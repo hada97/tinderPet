@@ -48,7 +48,6 @@ const renderCurrentDog = () => {
     dogGender.innerHTML = `Gender: ${dog.gender}`;
     dogNeutered.innerHTML = `Neutered: ${dog.neutered ? "Yes" : "No"}`;
     dogImage.src = dog.profilePictureUrl;
-    input.value = "";
   } else {
     dogImage.style.display = "none";
     dogName.innerHTML = "Not found :c";
