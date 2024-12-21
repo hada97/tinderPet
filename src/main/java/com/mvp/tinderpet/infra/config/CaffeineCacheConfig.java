@@ -15,7 +15,7 @@ public class CaffeineCacheConfig {
     public CacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
-                .expireAfterWrite(10, TimeUnit.MINUTES)  // Expiração do cache após 10 minutos
+                .expireAfterWrite(59, TimeUnit.MINUTES)  // Expiração do cache após 10 minutos
                 .maximumSize(100));  // Limite de 100 elementos no cache
         return cacheManager;
     }

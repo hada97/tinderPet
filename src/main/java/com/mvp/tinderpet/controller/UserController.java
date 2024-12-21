@@ -5,11 +5,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -24,12 +22,6 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return ResponseEntity.ok(users);
-    }
-
-    @GetMapping("/page")
     public Page<User> getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -37,9 +29,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public UserDetail createUser(@RequestBody @Valid UserDto userDto) {
-        return userService.createUser(userDto);
+    public ResponseEntity<UserDetail> createUser(@RequestBody @Valid UserDto user) {
+
+        if (userService.existsByEmail(user.email())) {
+            // Retorna um Status 409 (Conflict) com uma mensagem informando que o usuário já foi registrado
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new UserDetail("User already registered", null)); // ou outra mensagem personalizada
+        }
+        userService.registerNewUser(user.email(), user.name());
+
+        UserDetail userDetail = new UserDetail(user.name(), user.dogs());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDetail);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
@@ -49,4 +52,5 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+
 }

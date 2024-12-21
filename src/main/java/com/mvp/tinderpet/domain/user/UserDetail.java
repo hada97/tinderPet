@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 public record UserDetail(
-        Long id,
         @NotBlank String name,
         List<Dog> dogs
 ) {

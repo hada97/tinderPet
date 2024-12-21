@@ -33,15 +33,13 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @NotBlank
     @Column(unique = true)
     private String phone;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore  // Evita que a lista de dogs seja serializada quando um User for retornado
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Dog> dogs;
 
-    @NotBlank
     private String address;  // Renomeei para seguir convenções de nomenclatura em Java
 
     private Double latitude;  // Latitude do usuário

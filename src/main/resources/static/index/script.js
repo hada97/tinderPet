@@ -3,6 +3,7 @@ let currentPage = 0; // Página atual (inicialmente, página 0)
 let dogsPerPage = 10; // Número de cachorros por página (10 por vez)
 let dogsList = []; // Lista de cachorros da página atual
 let currentDogIndex = 0; // Índice do cachorro atual na página
+let totalPages = 0; // Número total de páginas (inicialmente 0)
 
 const baseUrl = "http://localhost:8080";
 const apiUrlDogs = `${baseUrl}/dogs`;
@@ -77,31 +78,37 @@ const fetchDogsPage = async (page, size) => {
     if (APIResponse.status === 200) {
       const data = await APIResponse.json();
       console.log("Dados da API:", data); // Verifique os dados da API
-      return data; // Verifica se 'data.content' tem os cachorros
+
+      // Extrair os dados da resposta
+      return {
+        content: data.content,          // Lista de cachorros
+        totalPages: data.page.totalPages  // Total de páginas
+      };
     } else {
       const errorData = await APIResponse.json();
       console.error(
-        `Erro: ${APIResponse.status} - ${
-          errorData.message || APIResponse.statusText
-        }`
+        `Erro: ${APIResponse.status} - ${errorData.message || APIResponse.statusText}`
       );
-      return { content: [] }; // Retorna uma lista vazia em caso de erro
+      return { content: [], totalPages: 0 }; // Retorna lista vazia e total de páginas 0
     }
   } catch (error) {
     console.error("Erro inesperado: ", error);
-    return { content: [] }; // Retorna uma lista vazia em caso de erro
+    return { content: [], totalPages: 0 }; // Retorna lista vazia e total de páginas 0
   }
 };
+
+
 
 // Função para renderizar a navegação de cachorros
 const navigateDog = (direction) => {
   if (direction === "next") {
     console.log("Cachorros carregados:", dogsList); // Verifique os cachorros carregados
+
     // Verificar se há mais cachorros na página atual
     if (currentDogIndex < dogsList.length - 1) {
       currentDogIndex += 1; // Avançar para o próximo cachorro
       renderCurrentDog();
-    } else if (currentPage < page.totalPages - 1) {
+    } else if (currentPage < totalPages - 1) {
       // Verificar se há mais páginas
       currentPage += 1; // Avançar para a próxima página
       currentDogIndex = 0; // Resetar para o primeiro cachorro da nova página
@@ -121,14 +128,17 @@ const navigateDog = (direction) => {
   }
 };
 
+
 // Função para carregar os cachorros da página atual
 const loadDogsPage = async () => {
   const pageData = await fetchDogsPage(currentPage, dogsPerPage);
   dogsList = pageData.content;
+  totalPages = pageData.totalPages;  // Atribuir o número total de páginas
   console.log("Cachorros carregados:", dogsList); // Verifique os cachorros carregados
   currentDogIndex = 0;
   renderCurrentDog();
 };
+
 
 addIcon.addEventListener("click", () => {
   addIcon.style.display = "none";
@@ -217,4 +227,3 @@ fetch("http://localhost:8080/api/user/profile", {
     console.error("Erro ao carregar o nome do usuário:", error);
     document.getElementById("user-name").innerText = "Erro ao carregar o nome";
   });
-

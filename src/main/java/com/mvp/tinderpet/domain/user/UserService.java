@@ -1,6 +1,7 @@
 package com.mvp.tinderpet.domain.user;
 
 
+import com.mvp.tinderpet.domain.dog.DogRepository;
 import com.mvp.tinderpet.location.GeocodingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Service
@@ -22,6 +24,9 @@ public class UserService {
     @Autowired
     private GeocodingService geocodingService;
 
+    @Autowired
+    private DogRepository dogRepository;
+
     @Cacheable(value = "users")
     public Page<User> getAll(int page, int size) {
         Pageable pageRequest = PageRequest.of(page, size);
@@ -30,20 +35,17 @@ public class UserService {
 
     @Transactional
     @CacheEvict(value = "users", allEntries = true) // Invalid cache
-    public UserDetail createUser(UserDto userDTO) {
+    public void registerNewUser(String email, String name) {
 
-        User user = new User();
-        user.setName(userDTO.name());
-        user.setEmail(userDTO.email());
-        user.setPhone(userDTO.phone());
-        user.setAddress(userDTO.address());
-
-        User savedUser = userRepository.save(user);
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setName(name);
+        User savedUser = userRepository.save(newUser);
 
         calculateCoordinates(savedUser);
 
-        return new UserDetail(
-                savedUser.getId(),  // id
+        new UserDetail(
+                // id
                 savedUser.getName(), // name
                 savedUser.getDogs()  // dogs
         );
@@ -64,14 +66,21 @@ public class UserService {
 
 
     @Transactional
-    @CacheEvict(value = "users", allEntries = true) // Invalid cache
+    @CacheEvict(value = "users", allEntries = true)
     public boolean deleteUser(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
+            // A exclusão de User com cascade vai automaticamente excluir os Dogs associados
             userRepository.delete(user.get());
             return true;
         }
         return false;
     }
+
+
+    public boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
+
 
 }

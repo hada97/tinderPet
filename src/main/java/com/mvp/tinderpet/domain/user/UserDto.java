@@ -13,10 +13,8 @@ public record UserDto(
         @Email(message = "Email deve ser válido")
         String email,
 
-        @NotBlank(message = "Phone é obrigatório")
         String phone,
 
-        @NotBlank(message = "Endereço é obrigatório")
         String address,
 
         Double latitude,
