@@ -56,10 +56,7 @@ public class DogController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDog(@PathVariable Long id) {
-        boolean deleted = dogService.deleteDog(id).hasBody();
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        dogService.deleteDog(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

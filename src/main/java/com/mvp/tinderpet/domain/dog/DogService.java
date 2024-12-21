@@ -11,10 +11,13 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 @Service
 public class DogService {
@@ -74,11 +77,28 @@ public class DogService {
 
     @Transactional
     @CacheEvict(value = "dogs")
-    public ResponseEntity<?> deleteDog(Long id) {
+    public void deleteDog(Long id) {
         Dog dogEntity = dogRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cão não encontrado com ID: " + id));
         dogRepository.delete(dogEntity);
+        ResponseEntity.noContent().build();
+    }
+
+    @Transactional
+    @CacheEvict(value = "dogs")
+    public ResponseEntity<?> deleteDog(Long id, OAuth2AuthenticationToken authentication) {
+        OAuth2User oAuth2User = authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+
+        Dog dogEntity = dogRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cão não encontrado com ID: " + id));
+
+        if (!dogEntity.getUser().getEmail().equals(email)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não tem permissão para excluir este cão.");
+        }
+        dogRepository.delete(dogEntity);
         return ResponseEntity.noContent().build();
     }
+
 
 }

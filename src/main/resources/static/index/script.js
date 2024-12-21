@@ -206,7 +206,7 @@ document
 
 function logout() {
   alert("Você saiu!");
-  window.location.href = "/login";
+  window.location.href = "/";
 }
 
 fetch("http://localhost:8080/api/user/profile", {
