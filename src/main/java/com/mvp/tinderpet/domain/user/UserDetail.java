@@ -7,6 +7,4 @@ import java.util.List;
 public record UserDetail(
         @NotBlank String name,
         List<Dog> dogs
-) {
-
-}
+) {}

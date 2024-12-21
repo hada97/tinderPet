@@ -40,29 +40,33 @@ public class UserController {
             @PathVariable Long id, // Pega o ID do usuário
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-
-        // Busca os cachorros do usuário com base no ID
         return dogService.getDogsByUserId(id, page, size);
     }
 
 
-    // Endpoint de login via OAuth2 (após redirecionamento do Google)
+    // Endpoint de login via OAuth2
     @GetMapping("/login/oauth2/code/google")
     public ResponseEntity<UserDetail> loginWithGoogle(OAuth2AuthenticationToken authentication) {
         OAuth2User oAuth2User = authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
 
-        // Verifica se o usuário já está registrado
         if (!userService.existsByEmail(email)) {
-            // Registra o usuário automaticamente
             userService.registerNewUser(email, name);
         }
+        Long userId = userService.getUserIdByEmailFromGoogle();
 
-        // Cria o UserDetail com os dados do usuário
-        UserDetail userDetail = new UserDetail(name, null); // Aqui você pode adicionar outras informações
-
+        UserDetail userDetail = new UserDetail(name, null);
         return ResponseEntity.ok(userDetail);
+    }
+
+
+    @GetMapping("/login/id")
+    public ResponseEntity<Long> userIdByGoogleEmail(OAuth2AuthenticationToken authentication) {
+        OAuth2User oAuth2User = authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+        Long userId = userService.getUserIdByEmailFromGoogle();
+        return ResponseEntity.ok(userId);
     }
 
 
@@ -70,7 +74,7 @@ public class UserController {
     public ResponseEntity<UserDetail> createUser(@RequestBody @Valid UserDto user) {
 
         if (userService.existsByEmail(user.email())) {
-            // Retorna um Status 409 (Conflict) com uma mensagem informando que o usuário já foi registrado
+            // Retorna um Status 409 (Conflict) com uma mensagem o usuário já foi registrado
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new UserDetail("User already registered", null)); // ou outra mensagem personalizada
         }
@@ -91,7 +95,7 @@ public class UserController {
                     .header("Location", "/custom_login.html")
                     .build();
         }
-        // Se o usuário não for encontrado ou não for excluído, pode retornar um código 404 (não encontrado)
+        // Se o usuário não for encontrado ou não for excluído, pode retornar um código 404
         return ResponseEntity.notFound().build();
     }
 

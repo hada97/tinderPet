@@ -1,20 +1,19 @@
-// Variáveis globais para controle de navegação
 let currentPage = 0; // Página atual (inicialmente, página 0)
 let dogsPerPage = 5; // Número de cachorros por página (5 por vez)
 let dogsList = []; // Lista de cachorros da página atual
 let totalPages = 0; // Número total de páginas (inicialmente 0)
 
 const baseUrl = "http://localhost:8080";
-let apiUrlDogs = ""; // A URL para pegar os cachorros do usuário será configurada dinamicamente
+let apiUrlDogs = "";
 
 const token = localStorage.getItem("authToken");
 
 // Seletores de elementos HTML
 const dogContainer = document.querySelector(".dog-container"); // Onde os cards serão renderizados
-const formTemplate = document.querySelector("#dog-form-template"); // Template de formulário ou card (se usar template no HTML)
+const formTemplate = document.querySelector("#dog-form-template"); // Template de formulário ou card
 const userProfileName = document.getElementById("user-name");
 
-// Função para renderizar um único cachorro em um card
+// Função para renderizar um único dogs em um card
 const renderDogCard = (dog) => {
   const dogCard = document.importNode(formTemplate.content, true);
 
@@ -36,26 +35,30 @@ const renderDogCard = (dog) => {
   dogNeutered.innerHTML = `Neutered: ${dog.neutered ? "Yes" : "No"}`;
   dogImage.src = dog.profilePictureUrl;
 
-  dogContainer.appendChild(dogCard); // Adiciona o card no container
+  const mainContainer = document.querySelector(".main-container");
+  mainContainer.appendChild(dogCard);
 };
 
-// Função para carregar os cachorros da API
+//Função para carregar os dogs da API
 const loadDogsPage = async (userId) => {
   try {
     apiUrlDogs = `${baseUrl}/users/${userId}/dogs`; // URL com o ID dinâmico do usuário
 
-    const response = await fetch(`${apiUrlDogs}?page=${currentPage}&size=${dogsPerPage}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${apiUrlDogs}?page=${currentPage}&size=${dogsPerPage}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     const pageData = await response.json();
-    dogsList = pageData.content; // Cachorros retornados da API
+    dogsList = pageData.content; // dogs retornados da API
     totalPages = pageData.totalPages; // Número total de páginas
 
-    // Limpar a área de exibição antes de renderizar
-    dogContainer.innerHTML = "";
+    // Exibir os dados dos cachorros no console
+    console.log("Cachorros carregados:", dogsList); // Aqui você exibe a lista de cachorros
 
     // Se não houver cachorros, não renderiza nada
     if (dogsList.length === 0) {
@@ -63,15 +66,14 @@ const loadDogsPage = async (userId) => {
       return;
     }
 
-    // Renderiza os cachorros em cards
+    // Renderiza os dogs em cards
     dogsList.forEach(renderDogCard); // Renderiza os cachorros em cards
-
   } catch (error) {
     console.error("Erro ao carregar cachorros:", error);
   }
 };
 
-// Função para carregar os dados do usuário e obter o ID
+// Função para carregar os dados do usuário
 const loadUserProfile = async () => {
   try {
     const response = await fetch("http://localhost:8080/api/user/profile", {
@@ -80,21 +82,35 @@ const loadUserProfile = async () => {
       },
     });
 
+    if (!response.ok) {
+      throw new Error("Falha ao carregar o perfil do usuário");
+    }
+
     const data = await response.json();
     userProfileName.innerText = data.name;
 
-    const userId = data.id; // Supondo que o ID do usuário seja retornado no perfil
-    loadDogsPage(userId); // Carregar os cachorros com o ID do usuário
+    const responseUserId = await fetch("http://localhost:8080/users/login/id", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
+    if (responseUserId.ok) {
+      const userId = await responseUserId.json();
+      console.log("User ID:", userId);
+      loadDogsPage(userId);
+    } else {
+      throw new Error("Falha ao obter o userId");
+    }
   } catch (error) {
-    console.error("Erro ao carregar o nome do usuário:", error);
+    console.error("Erro ao carregar os dados do usuário:", error);
     userProfileName.innerText = "Erro ao carregar o nome";
   }
 };
 
-// Carregar os cachorros e o perfil do usuário assim que o DOM estiver pronto
+// Carregar os dogs e o perfil do usuário assim que o DOM estiver pronto
 document.addEventListener("DOMContentLoaded", () => {
-  loadUserProfile();  // Carrega o perfil do usuário e chama loadDogsPage com o ID
+  loadUserProfile(); // Carrega o perfil do usuário e chama loadDogsPage com o ID
 });
 
 // Função de logout
