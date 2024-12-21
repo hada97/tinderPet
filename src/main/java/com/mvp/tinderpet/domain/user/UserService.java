@@ -1,6 +1,5 @@
 package com.mvp.tinderpet.domain.user;
 
-
 import com.mvp.tinderpet.domain.dog.DogRepository;
 import com.mvp.tinderpet.location.GeocodingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -64,7 +65,6 @@ public class UserService {
         }
     }
 
-
     @Transactional
     @CacheEvict(value = "users", allEntries = true)
     public boolean deleteUser(Long id) {
@@ -76,6 +76,25 @@ public class UserService {
         }
         return false;
     }
+
+
+    public Long getUserIdByEmailFromGoogle() {
+        // Obtém o usuário autenticado
+        OAuth2User oAuth2User = (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Pega o email do Google, assume que o atributo "email" está presente
+        String email = oAuth2User.getAttribute("email");
+        // Verifica se o email é nulo
+        if (email == null) {
+            throw new NoSuchElementException("Email não encontrado");
+        }
+        // Busca o usuário no banco de dados usando o repositório
+        User user = userRepository.findByEmail(email);
+
+        // Retorna o ID do usuário
+        return user.getId();
+    }
+
 
 
     public boolean existsByEmail(String email) {

@@ -165,7 +165,6 @@ document
       document.getElementById("profilePictureUrl").value;
     const description = document.getElementById("description").value;
     const isNeutered = document.getElementById("isNeutered").checked;
-    const userId = document.getElementById("userId").value;
 
     const token = localStorage.getItem("access_token");
 
@@ -185,7 +184,6 @@ document
           profilePictureUrl,
           description,
           isNeutered,
-          userId,
         }),
       });
 

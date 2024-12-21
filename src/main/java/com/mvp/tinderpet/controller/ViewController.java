@@ -20,7 +20,7 @@ public class ViewController {
         return "profile";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/")
     public String login() {
         return "custom_login";
     }

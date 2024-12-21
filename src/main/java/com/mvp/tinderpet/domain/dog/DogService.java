@@ -2,6 +2,7 @@ package com.mvp.tinderpet.domain.dog;
 
 import com.mvp.tinderpet.domain.user.User;
 import com.mvp.tinderpet.domain.user.UserRepository;
+import com.mvp.tinderpet.domain.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -24,6 +25,9 @@ public class DogService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
 
     @Cacheable(value = "dogs")
     public Page<Dog> getDogs(int page, int size) {
@@ -40,7 +44,9 @@ public class DogService {
     @CacheEvict(value = "dogs")
     public DogDetail createDog(DogDto dados) {
 
-        User user = userRepository.findById(dados.getUserId())
+        Long userId = userService.getUserIdByEmailFromGoogle();
+
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
 
         Dog dog = new Dog();

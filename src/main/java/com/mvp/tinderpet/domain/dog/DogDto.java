@@ -2,7 +2,7 @@ package com.mvp.tinderpet.domain.dog;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class DogDto {
     @NotBlank
     private String breed;
 
-    @Positive
+    @PositiveOrZero
     private int age;
 
     private Sex gender;
@@ -35,5 +35,4 @@ public class DogDto {
     @NotNull(message = "A informação de castração é obrigatória")
     private boolean isNeutered;
 
-    private Long userId;  // Aqui, apenas o ID do User é passado, não o objeto completo de User
 }
