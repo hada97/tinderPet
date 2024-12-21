@@ -27,43 +27,27 @@
 
 <!-- Conteúdo específico da página -->
 <div class="main-container">
-
-
-    <div class="dog-container">
-        <div class="dog__image-container">
-            <img
-                    src="#"
-                    alt="dog image"
-                    class="dog__image"
-                    style="display: none"
-            />
-        </div>
-
-        <div class="dog__info-container">
-            <div class="dog__details">
-                <h1 class="dog__data">
-                    <span class="dog__name"></span>
-                </h1>
-                <p class="dog__description"></p>
-                <p class="dog__age"></p>
-                <p class="dog__breed"></p>
-                <p class="dog__size"></p>
-                <p class="dog__gender"></p>
-                <p class="dog__neutered"></p>
+    <!-- Template de Card de Cachorro (será usado pelo JS) -->
+    <template id="dog-form-template">
+        <div class="dog-card">
+            <div class="dog__image-container">
+                <img class="dog__image" src="#" alt="Dog Image" />
+            </div>
+            <div class="dog__info-container">
+                <div class="dog__details">
+                    <h2 class="dog__name"></h2>
+                    <p class="dog__description"></p>
+                    <p class="dog__age"></p>
+                    <p class="dog__breed"></p>
+                    <p class="dog__size"></p>
+                    <p class="dog__gender"></p>
+                    <p class="dog__neutered"></p>
+                </div>
             </div>
         </div>
+    </template>
 
-        <div class="control">
-            <form class="form">
-
-            </form>
-
-            <div class="buttons">
-
-            </div>
-
-        </div>
-
+    <!-- A área onde os cards dos cachorros serão renderizados -->
 </div>
 
 <!-- Rodapé -->
