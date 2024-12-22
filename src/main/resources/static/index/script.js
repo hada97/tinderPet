@@ -1,10 +1,9 @@
-// Variáveis globais para controle de navegação
-let currentPage = 0; // Página atual (inicialmente, página 0)
-let dogsPerPage = 10; // Número de cachorros por página (10 por vez)
-let dogsList = []; // Lista de cachorros da página atual
-let currentDogIndex = 0; // Índice do cachorro atual na página
-let totalPages = 0; // Número total de páginas (inicialmente 0)
 
+let currentPage = 0;
+let dogsPerPage = 10;
+let dogsList = [];
+let currentDogIndex = 0;
+let totalPages = 0;
 const baseUrl = "http://localhost:8080";
 const apiUrlDogs = `${baseUrl}/dogs`;
 
@@ -25,6 +24,8 @@ const buttonPrev = document.querySelector(".btn-prev");
 const buttonNext = document.querySelector(".btn-next");
 const addIcon = document.getElementById("addIcon");
 const addForm = document.getElementById("addForm");
+const dogCard = document.querySelector(".dog-container");
+
 
 // Função para renderizar os detalhes do cachorro atual
 const renderCurrentDog = () => {
@@ -38,7 +39,6 @@ const renderCurrentDog = () => {
     dogSize.innerHTML = "";
     dogGender.innerHTML = "";
     dogNeutered.innerHTML = "";
-
     dogImage.style.display = "block";
     dogName.innerHTML = dog.name;
     dogDescription.innerHTML = `Description: ${dog.description}`;
@@ -48,16 +48,8 @@ const renderCurrentDog = () => {
     dogGender.innerHTML = `Gender: ${dog.gender}`;
     dogNeutered.innerHTML = `Neutered: ${dog.neutered ? "Yes" : "No"}`;
     dogImage.src = dog.profilePictureUrl;
-  } else {
-    dogImage.style.display = "none";
-    dogName.innerHTML = "Not found :c";
-    dogNumber.innerHTML = "";
-    dogDescription.innerHTML = "";
-    dogAge.innerHTML = "";
-    dogBreed.innerHTML = "";
-    dogSize.innerHTML = "";
-    dogGender.innerHTML = "";
-    dogNeutered.innerHTML = "";
+    dogCard.setAttribute("data-id", dog.id);
+
   }
 };
 
@@ -222,3 +214,46 @@ fetch("http://localhost:8080/api/user/profile", {
     console.error("Erro ao carregar o nome do usuário:", error);
     document.getElementById("user-name").innerText = "Erro ao carregar o nome";
   });
+
+
+
+
+document.querySelectorAll('.button.btn-right').forEach(button => {
+  button.addEventListener('click', async function() {
+    const dogCardContainer = this.closest(".dog-container"); // Ajuste para pegar o card correto
+    const dogId = dogCardContainer.getAttribute("data-id");
+    console.log("DOG ID:", dogId);
+
+    try {
+      // Obter o ID do usuário
+      const responseUserId = await fetch(`${baseUrl}/users/login/id`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (responseUserId.ok) {
+        const userId = await responseUserId.json();
+        console.log("User ID:", userId);
+
+        // Fazer a requisição para curtir o cachorro
+        const responseLike = await fetch(`${baseUrl}/dogs/${dogId}/like/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        // Caso a curtida tenha dado certo, avança para o próximo cachorro
+        navigateDog("next");
+        console.log("lIKE REGISTRADO");
+
+      } else {
+        throw new Error("Falha ao obter o userId");
+      }
+    } catch (error) {
+      console.error("Erro ao curtir:", error);
+    }
+  });
+});

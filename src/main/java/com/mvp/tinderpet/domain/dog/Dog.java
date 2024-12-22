@@ -8,6 +8,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @Table(name = "dogs")
@@ -47,4 +50,19 @@ public class Dog {
     @JoinColumn(name = "user_id")  // Coluna que faz a chave estrangeira
     @JsonIgnore  // Evita que o usuário seja serializado ao serializar o Dog
     private User user;
+
+    @ElementCollection
+    @CollectionTable(name = "dog_likes", joinColumns = @JoinColumn(name = "dog_id"))
+    @Column(name = "liked_user_id")
+    private Set<Long> likes = new HashSet<>();
+
+
+    public void addLike(Long dogId) {
+        likes.add(dogId);
+    }
+
+    public void removeLike(Long dogId) {
+        likes.remove(dogId);
+    }
+
 }

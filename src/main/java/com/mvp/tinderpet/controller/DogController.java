@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +24,12 @@ public class DogController {
     private DogRepository dogRepository;
 
     @GetMapping
-    public Page<Dog> getDogs(
+    public Page<Dog> getAllDogs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return dogService.getDogs(page, size);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Dog> getDogById(@PathVariable Long id) {
@@ -60,4 +63,32 @@ public class DogController {
         dogService.deleteDog(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+    @PostMapping("/{dogId}/like/{userId}")
+    public ResponseEntity<String> likeDog(@PathVariable Long dogId, @PathVariable Long userId) {
+        boolean liked = dogService.addLike(dogId, userId);
+        if (liked) {
+            return ResponseEntity.ok("Cão com ID " + dogId + " curtiu com sucesso!");
+        } else {
+            return ResponseEntity.badRequest().body("Falha ao curtir o cão com ID " + dogId);
+        }
+    }
+
+    @DeleteMapping("/{dogId}/like/{userId}")
+    public ResponseEntity<String> removeLike(@PathVariable Long dogId, @PathVariable Long userId) {
+        boolean removed = dogService.removeLike(dogId, userId);
+        if (removed) {
+            return ResponseEntity.ok("A curtida foi removida com sucesso!");
+        } else {
+            return ResponseEntity.badRequest().body("Falha ao remover a curtida.");
+        }
+    }
+
+
+
+
+
+
+
 }

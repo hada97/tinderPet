@@ -16,9 +16,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -34,11 +37,12 @@ public class DogService {
     @Autowired
     private UserService userService;
 
-
     @Cacheable(value = "dogs")
     public Page<Dog> getDogs(int page, int size) {
         Pageable pageRequest = PageRequest.of(page, size);
-        return dogRepository.findAll(pageRequest);
+        Long userId = userService.getUserIdByEmailFromGoogle();
+        return dogRepository.findByUserIdNot(userId, pageRequest);
+
     }
 
     public Dog getDogById(Long id) {
@@ -110,6 +114,30 @@ public class DogService {
     public Page<Dog> getDogsByUserId(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return dogRepository.findByUserId(userId, pageable);
+    }
+
+    // Adiciona uma curtida
+    public boolean addLike(Long dogId, Long userId) {
+        Optional<Dog> dogOptional = dogRepository.findById(dogId);
+        if (dogOptional.isPresent()) {
+            Dog dog = dogOptional.get();
+            dog.addLike(userId); // Adiciona a curtida no Dog
+            dogRepository.save(dog); // Salva o Dog após adicionar a curtida
+            return true;
+        }
+        return false;
+    }
+
+    // Remove uma curtida
+    public boolean removeLike(Long dogId, Long userId) {
+        Optional<Dog> dogOptional = dogRepository.findById(dogId);
+        if (dogOptional.isPresent()) {
+            Dog dog = dogOptional.get();
+            dog.removeLike(userId); // Remove a curtida do Dog
+            dogRepository.save(dog); // Salva o Dog após remover a curtida
+            return true;
+        }
+        return false;
     }
 
 

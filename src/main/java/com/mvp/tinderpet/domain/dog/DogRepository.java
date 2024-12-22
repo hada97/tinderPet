@@ -10,4 +10,6 @@ public interface DogRepository extends JpaRepository<Dog, Long> {
 
     Page<Dog> findByUserId(Long userId, Pageable pageable);
 
+    Page<Dog> findByUserIdNot(Long userId, Pageable pageable);
+
 }
