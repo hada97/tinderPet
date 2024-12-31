@@ -3,9 +3,9 @@ package com.mvp.tinderpet.service;
 import com.mvp.tinderpet.domain.dog.Dog;
 import com.mvp.tinderpet.domain.dog.DogDetail;
 import com.mvp.tinderpet.domain.dog.DogDto;
-import com.mvp.tinderpet.domain.dog.DogRepository;
+import com.mvp.tinderpet.repository.DogRepository;
 import com.mvp.tinderpet.domain.user.User;
-import com.mvp.tinderpet.domain.user.UserRepository;
+import com.mvp.tinderpet.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,12 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-
+import java.util.*;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -40,12 +35,29 @@ public class DogService {
     private UserService userService;
 
 
-    @Cacheable(value = "dogs")
+    /*
+    @Transactional
+    public Page<Dog> getDogs(int page, int size) {
+        Pageable pageRequest = PageRequest.of(page, size);
+        Long userId = userService.getUserIdByEmailFromGoogle();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Set<Long> likedDogsIds = user.getLikedDogsIds();
+
+        return dogRepository.findByUserIdNotAndIdNotIn(userId, likedDogsIds, pageRequest);
+
+    }*/
+
+
+    @Transactional
     public Page<Dog> getDogs(int page, int size) {
         Pageable pageRequest = PageRequest.of(page, size);
         Long userId = userService.getUserIdByEmailFromGoogle();
         return dogRepository.findByUserIdNot(userId, pageRequest);
     }
+
 
 
     public Dog getDogById(Long id) {
@@ -54,7 +66,6 @@ public class DogService {
     }
 
     @Transactional
-    @CacheEvict(value = "dogs")
     public DogDetail createDog(DogDto dados) {
 
         Long userId = userService.getUserIdByEmailFromGoogle();
@@ -62,21 +73,25 @@ public class DogService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
 
-        if (user.getDogs().size() >= 5) {
-            throw new IllegalStateException("Limite de 5 cães atingido.");
+        if (user.getDogs().size() < 4) {
+            Dog dog = new Dog();
+            dog.setName(dados.getName());
+            dog.setBreed(dados.getBreed());
+            dog.setAge(dados.getAge());
+            dog.setGender(dados.getGender());
+            dog.setSize(dados.getSize());
+            dog.setProfilePictureUrl(dados.getProfilePictureUrl());
+            dog.setDescription(dados.getDescription());
+            dog.setNeutered(dados.isNeutered());
+            dog.setUser(user);
+            dog.setLikes(null);
+            dogRepository.save(dog);
+            userRepository.save(user);
+            return new DogDetail(dog);
+        } else {
+            throw new IllegalStateException("Limite de 3 cães atingido.");
         }
-        Dog dog = new Dog();
-        dog.setName(dados.getName());
-        dog.setBreed(dados.getBreed());
-        dog.setAge(dados.getAge());
-        dog.setGender(dados.getGender());
-        dog.setSize(dados.getSize());
-        dog.setProfilePictureUrl(dados.getProfilePictureUrl());
-        dog.setDescription(dados.getDescription());
-        dog.setNeutered(dados.isNeutered());
-        dog.setUser(user);
-        dogRepository.save(dog);
-        return new DogDetail(dog);
+
     }
 
     @Transactional

@@ -56,17 +56,15 @@ public class Dog {
 
 
     public void addLike(Like like) {
-        likes.add(like);
-        like.setDog(this);  // Definir o cão associado ao like
+        if (!this.likes.contains(like)) {
+            this.likes.add(like);
+        }
     }
 
     public void removeLike(Like like) {
         likes.remove(like);
         like.setDog(null);  // Desassociar o like do cão
     }
-
-
-
 
 
 

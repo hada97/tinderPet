@@ -1,6 +1,7 @@
-package com.mvp.tinderpet.domain.like;
+package com.mvp.tinderpet.repository;
 
 import com.mvp.tinderpet.domain.dog.Dog;
+import com.mvp.tinderpet.domain.like.Like;
 import com.mvp.tinderpet.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

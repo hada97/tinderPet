@@ -1,11 +1,12 @@
 package com.mvp.tinderpet.service;
 
 import com.mvp.tinderpet.domain.dog.Dog;
-import com.mvp.tinderpet.domain.dog.DogRepository;
+import com.mvp.tinderpet.repository.DogRepository;
 import com.mvp.tinderpet.domain.like.Like;
-import com.mvp.tinderpet.domain.like.LikeRepository;
+import com.mvp.tinderpet.repository.LikeRepository;
 import com.mvp.tinderpet.domain.user.User;
-import com.mvp.tinderpet.domain.user.UserRepository;
+import com.mvp.tinderpet.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class LikeService {
     private LikeRepository likeRepository;
 
 
+    @Transactional
     public boolean addLike(Long dogId, Long userId) {
         Optional<Dog> dogOptional = dogRepository.findById(dogId);
         Optional<User> userOptional = userRepository.findById(userId);
@@ -53,6 +55,7 @@ public class LikeService {
     }
 
 
+    @Transactional
     public boolean removeLike(Long dogId, Long userId) {
         Optional<Dog> dogOptional = dogRepository.findById(dogId);
         Optional<User> userOptional = userRepository.findById(userId);

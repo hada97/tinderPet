@@ -27,4 +27,6 @@ public class Like {
 
     private boolean isMutual;
 
+    public void setDog(Dog dog) {
+    }
 }

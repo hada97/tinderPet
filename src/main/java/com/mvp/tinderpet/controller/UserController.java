@@ -2,6 +2,7 @@ package com.mvp.tinderpet.controller;
 
 import com.mvp.tinderpet.domain.dog.Dog;
 import com.mvp.tinderpet.domain.user.*;
+import com.mvp.tinderpet.repository.UserRepository;
 import com.mvp.tinderpet.service.DogService;
 import com.mvp.tinderpet.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

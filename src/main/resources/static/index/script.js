@@ -1,4 +1,3 @@
-
 let currentPage = 0;
 let dogsPerPage = 10;
 let dogsList = [];
@@ -26,8 +25,7 @@ const addIcon = document.getElementById("addIcon");
 const addForm = document.getElementById("addForm");
 const dogCard = document.querySelector(".dog-container");
 
-
-// Função para renderizar os detalhes do cachorro atual
+// Renderiza os detalhes do cachorro atual
 const renderCurrentDog = () => {
   if (dogsList.length > 0 && currentDogIndex < dogsList.length) {
     const dog = dogsList[currentDogIndex];
@@ -49,11 +47,10 @@ const renderCurrentDog = () => {
     dogNeutered.innerHTML = `Neutered: ${dog.neutered ? "Yes" : "No"}`;
     dogImage.src = dog.profilePictureUrl;
     dogCard.setAttribute("data-id", dog.id);
-
   }
 };
 
-// Função para buscar os cachorros da página atual
+// Busca os cachorros da página atual
 const fetchDogsPage = async (page, size) => {
   try {
     const APIResponse = await fetch(
@@ -68,65 +65,57 @@ const fetchDogsPage = async (page, size) => {
 
     if (APIResponse.status === 200) {
       const data = await APIResponse.json();
-      console.log("Dados da API:", data); // Verifique os dados da API
+      console.log("Dados da API:", data);
 
-      // Extrair os dados da resposta
       return {
-        content: data.content,          // Lista de cachorros
-        totalPages: data.page.totalPages  // Total de páginas
+        content: data.content,
+        totalPages: data.page.totalPages,
       };
     } else {
       const errorData = await APIResponse.json();
       console.error(
-        `Erro: ${APIResponse.status} - ${errorData.message || APIResponse.statusText}`
+        `Erro: ${APIResponse.status} - ${
+          errorData.message || APIResponse.statusText
+        }`
       );
-      return { content: [], totalPages: 0 }; // Retorna lista vazia e total de páginas 0
+      return { content: [], totalPages: 0 };
     }
   } catch (error) {
     console.error("Erro inesperado: ", error);
-    return { content: [], totalPages: 0 }; // Retorna lista vazia e total de páginas 0
+    return { content: [], totalPages: 0 };
   }
 };
 
-
-
-// Função para renderizar a navegação de cachorros
+// Navegação entre os cachorros
 const navigateDog = (direction) => {
   if (direction === "next") {
-
-    // Verificar se há mais cachorros na página atual
     if (currentDogIndex < dogsList.length - 1) {
-      currentDogIndex += 1; // Avançar para o próximo cachorro
+      currentDogIndex += 1;
       renderCurrentDog();
     } else if (currentPage < totalPages - 1) {
-      // Verificar se há mais páginas
-      currentPage += 1; // Avançar para a próxima página
-      currentDogIndex = 0; // Resetar para o primeiro cachorro da nova página
-      loadDogsPage(); // Carregar os cachorros da nova página
+      currentPage += 1;
+      currentDogIndex = 0;
+      loadDogsPage();
     }
   } else if (direction === "prev") {
-    // Verificar se há cachorros anteriores na página atual
     if (currentDogIndex > 0) {
-      currentDogIndex -= 1; // Retroceder para o cachorro anterior
+      currentDogIndex -= 1;
       renderCurrentDog();
     } else if (currentPage > 0) {
-      // Verificar se há páginas anteriores
-      currentPage -= 1; // Retroceder para a página anterior
-      currentDogIndex = dogsPerPage - 1; // Definir o último cachorro da página anterior
-      loadDogsPage(); // Carregar os cachorros da página anterior
+      currentPage -= 1;
+      currentDogIndex = dogsPerPage - 1;
+      loadDogsPage();
     }
   }
 };
 
-
-// Função para carregar os cachorros da página atual
+// Carrega os cachorros da página atual
 const loadDogsPage = async () => {
   const pageData = await fetchDogsPage(currentPage, dogsPerPage);
   dogsList = pageData.content;
-  totalPages = pageData.totalPages;  // Atribuir o número total de páginas
+  totalPages = pageData.totalPages;
   renderCurrentDog();
 };
-
 
 addIcon.addEventListener("click", () => {
   addIcon.style.display = "none";
@@ -137,9 +126,9 @@ buttonNext.addEventListener("click", () => navigateDog("next"));
 
 buttonPrev.addEventListener("click", () => navigateDog("prev"));
 
-// Carregar os cachorros assim que o DOM estiver pronto
+// Inicialização ao carregar o DOM
 document.addEventListener("DOMContentLoaded", () => {
-  loadDogsPage(); // Certifique-se de que o carregamento da página de cachorros acontece apenas depois do DOM estar pronto
+  loadDogsPage();
 });
 
 // Formulário para registrar um novo cachorro
@@ -183,6 +172,7 @@ document
         document.getElementById("dogForm").reset();
         addForm.style.display = "none";
         addIcon.style.display = "block";
+        await loadDogsPage();
       } else {
         const data = await response.json();
         alert("Error: " + data.message);
@@ -194,12 +184,10 @@ document
     }
   });
 
-
 function logout() {
   alert("Você saiu!");
   window.location.href = "/";
 }
-
 
 fetch("http://localhost:8080/api/user/profile", {
   headers: {
@@ -215,17 +203,13 @@ fetch("http://localhost:8080/api/user/profile", {
     document.getElementById("user-name").innerText = "Erro ao carregar o nome";
   });
 
-
-
-
-document.querySelectorAll('.button.btn-right').forEach(button => {
-  button.addEventListener('click', async function() {
-    const dogCardContainer = this.closest(".dog-container"); // Ajuste para pegar o card correto
+document.querySelectorAll(".button.btn-right").forEach((button) => {
+  button.addEventListener("click", async function () {
+    const dogCardContainer = this.closest(".dog-container");
     const dogId = dogCardContainer.getAttribute("data-id");
     console.log("DOG ID:", dogId);
 
     try {
-      // Obter o ID do usuário
       const responseUserId = await fetch(`${baseUrl}/users/login/id`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -236,19 +220,16 @@ document.querySelectorAll('.button.btn-right').forEach(button => {
         const userId = await responseUserId.json();
         console.log("User ID:", userId);
 
-        // Fazer a requisição para curtir o cachorro
-        const responseLike = await fetch(`${baseUrl}/dogs/${dogId}/like/${userId}`, {
-          method: 'POST',
+        const responseLike = await fetch(`${baseUrl}/like/${dogId}/${userId}`, {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         });
-
-        // Caso a curtida tenha dado certo, avança para o próximo cachorro
         navigateDog("next");
         console.log("lIKE REGISTRADO");
-
+        await loadDogsPage();
       } else {
         throw new Error("Falha ao obter o userId");
       }
