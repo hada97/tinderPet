@@ -4,6 +4,7 @@ import com.mvp.tinderpet.domain.dog.Dog;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 
 public record UserDto(
         @NotBlank(message = "Nome é obrigatório")
@@ -21,7 +22,7 @@ public record UserDto(
 
         Double longitude,
 
-        List<Dog> dogs
+        Set<Dog> dogs
 ) {
 
 }

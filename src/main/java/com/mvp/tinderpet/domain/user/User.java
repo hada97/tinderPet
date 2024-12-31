@@ -1,15 +1,14 @@
 package com.mvp.tinderpet.domain.user;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mvp.tinderpet.domain.dog.Dog;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -17,8 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
 public class User {
 
     @Id
@@ -38,13 +35,25 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Dog> dogs;
+    private Set<Dog> dogs = new HashSet<>();
 
-    private String address;  // Renomeei para seguir convenções de nomenclatura em Java
+    private String address;
 
-    private Double latitude;  // Latitude do usuário
+    private Double latitude;
 
-    private Double longitude; // Longitude do usuário
+    private Double longitude;
 
+    @ElementCollection
+    @CollectionTable(name = "user_likes", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "liked_dog_id")
+    private Set<Long> likedDogsIds = new HashSet<>();
+
+    public void addLikedDog(Long dogId) {
+        likedDogsIds.add(dogId);
+    }
+
+    public void removeLikedDog(Long dogId) {
+        likedDogsIds.remove(dogId);
+    }
 
 }

@@ -2,6 +2,7 @@ package com.mvp.tinderpet.controller;
 
 import com.mvp.tinderpet.domain.dog.*;
 import com.mvp.tinderpet.service.DogService;
+import com.mvp.tinderpet.service.LikeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class DogController {
 
     @Autowired
     private DogRepository dogRepository;
+
+    @Autowired
+    private LikeService likeService;
 
     @GetMapping
     public Page<Dog> getAllDogs(
@@ -67,7 +71,7 @@ public class DogController {
 
     @PostMapping("/{dogId}/like/{userId}")
     public ResponseEntity<String> likeDog(@PathVariable Long dogId, @PathVariable Long userId) {
-        boolean liked = dogService.addLike(dogId, userId);
+        boolean liked = likeService.addLike(dogId, userId);
         if (liked) {
             return ResponseEntity.ok("Cão com ID " + dogId + " curtiu com sucesso!");
         } else {
@@ -77,17 +81,13 @@ public class DogController {
 
     @DeleteMapping("/{dogId}/like/{userId}")
     public ResponseEntity<String> removeLike(@PathVariable Long dogId, @PathVariable Long userId) {
-        boolean removed = dogService.removeLike(dogId, userId);
+        boolean removed = likeService.removeLike(dogId, userId);
         if (removed) {
             return ResponseEntity.ok("A curtida foi removida com sucesso!");
         } else {
             return ResponseEntity.badRequest().body("Falha ao remover a curtida.");
         }
     }
-
-
-
-
 
 
 
