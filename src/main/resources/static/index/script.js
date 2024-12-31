@@ -3,9 +3,10 @@ let dogsPerPage = 10;
 let dogsList = [];
 let currentDogIndex = 0;
 let totalPages = 0;
+let userId = null;
+
 const baseUrl = "http://localhost:8080";
 const apiUrlDogs = `${baseUrl}/dogs`;
-
 const token = localStorage.getItem("authToken");
 
 const dogName = document.querySelector(".dog__name");
@@ -29,7 +30,6 @@ const dogCard = document.querySelector(".dog-container");
 const renderCurrentDog = () => {
   if (dogsList.length > 0 && currentDogIndex < dogsList.length) {
     const dog = dogsList[currentDogIndex];
-
     dogName.innerHTML = "Loading...";
     dogDescription.innerHTML = "";
     dogAge.innerHTML = "";
@@ -54,7 +54,7 @@ const renderCurrentDog = () => {
 const fetchDogsPage = async (page, size) => {
   try {
     const APIResponse = await fetch(
-      `http://localhost:8080/dogs?page=${page}&size=${size}`,
+      `${baseUrl}/dogs?page=${page}&size=${size}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -85,6 +85,7 @@ const fetchDogsPage = async (page, size) => {
     return { content: [], totalPages: 0 };
   }
 };
+
 
 // Navegação entre os cachorros
 const navigateDog = (direction) => {
@@ -126,10 +127,6 @@ buttonNext.addEventListener("click", () => navigateDog("next"));
 
 buttonPrev.addEventListener("click", () => navigateDog("prev"));
 
-// Inicialização ao carregar o DOM
-document.addEventListener("DOMContentLoaded", () => {
-  loadDogsPage();
-});
 
 // Formulário para registrar um novo cachorro
 document
@@ -189,6 +186,7 @@ function logout() {
   window.location.href = "/";
 }
 
+//funcao carrega nome
 fetch("http://localhost:8080/api/user/profile", {
   headers: {
     Authorization: `Bearer ${token}`,
@@ -203,38 +201,59 @@ fetch("http://localhost:8080/api/user/profile", {
     document.getElementById("user-name").innerText = "Erro ao carregar o nome";
   });
 
+
+// Busca o userId na inicialização
+const fetchUserId = async () => {
+  try {
+    const response = await fetch(`${baseUrl}/users/login/id`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!response.ok) throw new Error("Falha ao obter o userId");
+
+    userId = await response.json();
+    console.log("User ID:", userId);
+  } catch (error) {
+    console.error("Erro ao buscar userId:", error);
+  }
+};
+
+// Like function
 document.querySelectorAll(".button.btn-right").forEach((button) => {
-  button.addEventListener("click", async function () {
-    const dogCardContainer = this.closest(".dog-container");
+  button.addEventListener("click", async () => {
+    if (!userId) {
+      console.error("User ID não está disponível!");
+      return;
+    }
+
+    const dogCardContainer = button.closest(".dog-container");
     const dogId = dogCardContainer.getAttribute("data-id");
     console.log("DOG ID:", dogId);
 
     try {
-      const responseUserId = await fetch(`${baseUrl}/users/login/id`, {
+      const responseLike = await fetch(`${baseUrl}/like/${dogId}/${userId}`, {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (responseUserId.ok) {
-        const userId = await responseUserId.json();
-        console.log("User ID:", userId);
+      if (!responseLike.ok) throw new Error("Falha ou DOG já foi curtido");
 
-        const responseLike = await fetch(`${baseUrl}/like/${dogId}/${userId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        navigateDog("next");
-        console.log("lIKE REGISTRADO");
-        await loadDogsPage();
-      } else {
-        throw new Error("Falha ao obter o userId");
-      }
+      console.log("LIKE REGISTRADO");
+      await loadDogsPage();
     } catch (error) {
-      console.error("Erro ao curtir:", error);
+      console.error("Erro ao curtir o dog:", error);
     }
   });
 });
+
+// Inicialização ao carregar o DOM
+document.addEventListener("DOMContentLoaded", async () => {
+  const [userIdResult, dogsResult] = await Promise.all([
+    fetchUserId(),
+    loadDogsPage(),
+  ]);
+});
+

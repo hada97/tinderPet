@@ -34,20 +34,14 @@ public class LikeService {
             User user = userOptional.get();
 
             if (!user.getLikedDogsIds().contains(dogId)) {
-
                 user.addLikedDog(dogId);
-
                 Like like = new Like();
                 like.setDog(dog);
                 like.setUser(user);
-
                 dog.addLike(like);
-
                 likeRepository.save(like);
-
                 dogRepository.save(dog);
                 userRepository.save(user);
-
                 return true;
             }
         }

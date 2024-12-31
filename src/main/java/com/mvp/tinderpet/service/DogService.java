@@ -35,7 +35,6 @@ public class DogService {
     private UserService userService;
 
 
-    /*
     @Transactional
     public Page<Dog> getDogs(int page, int size) {
         Pageable pageRequest = PageRequest.of(page, size);
@@ -45,19 +44,8 @@ public class DogService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Set<Long> likedDogsIds = user.getLikedDogsIds();
-
         return dogRepository.findByUserIdNotAndIdNotIn(userId, likedDogsIds, pageRequest);
-
-    }*/
-
-
-    @Transactional
-    public Page<Dog> getDogs(int page, int size) {
-        Pageable pageRequest = PageRequest.of(page, size);
-        Long userId = userService.getUserIdByEmailFromGoogle();
-        return dogRepository.findByUserIdNot(userId, pageRequest);
     }
-
 
 
     public Dog getDogById(Long id) {
@@ -73,7 +61,7 @@ public class DogService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
 
-        if (user.getDogs().size() < 4) {
+        if (user.getDogs().size() < 3) {
             Dog dog = new Dog();
             dog.setName(dados.getName());
             dog.setBreed(dados.getBreed());
@@ -133,6 +121,5 @@ public class DogService {
         Pageable pageable = PageRequest.of(page, size);
         return dogRepository.findByUserId(userId, pageable);
     }
-
-
+    
 }

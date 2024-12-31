@@ -84,25 +84,19 @@ public class UserService {
     public Long getUserIdByEmailFromGoogle() {
         // Obtém o usuário autenticado
         OAuth2User oAuth2User = (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         // Pega o email do Google, assume que o atributo "email" está presente
         String email = oAuth2User.getAttribute("email");
         // Verifica se o email é nulo
         if (email == null) {
             throw new NoSuchElementException("Email não encontrado");
         }
-        // Busca o usuário no banco de dados usando o repositório
         User user = userRepository.findByEmail(email);
-
-        // Retorna o ID do usuário
         return user.getId();
     }
-
 
 
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email) != null;
     }
-
 
 }

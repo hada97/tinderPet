@@ -30,8 +30,6 @@ public class GeocodingService {
             ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                // Parse da resposta JSON para extrair as coordenadas
-                System.out.println("======DEU CERTO ======");
                 return parseCoordinates(response.getBody());
 
             } else {
