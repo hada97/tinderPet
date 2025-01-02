@@ -1,7 +1,7 @@
 package com.mvp.tinderpet.domain.dog;
 
 public record DogDetail(
-        Long id,  // Adiciona um campo id
+        Long id,
         String name,
         String breed,
         int age,
@@ -15,7 +15,7 @@ public record DogDetail(
 
     public DogDetail(Dog dog) {
         this(
-                dog.getId(),  // Mapeia o id do Dog
+                dog.getId(),
                 dog.getName(),
                 dog.getBreed(),
                 dog.getAge(),

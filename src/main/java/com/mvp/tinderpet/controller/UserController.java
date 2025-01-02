@@ -71,16 +71,22 @@ public class UserController {
     }
 
 
+    @PatchMapping()
+    public ResponseEntity<Void> updateUser(@RequestBody UserUpdateDto data) {
+        userService.updateUser(data);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+
+
     @PostMapping("/register")
     public ResponseEntity<UserDetail> createUser(@RequestBody @Valid UserDto user) {
 
         if (userService.existsByEmail(user.email())) {
-            // Retorna um Status 409 (Conflict) com uma mensagem o usuário já foi registrado
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new UserDetail("User already registered", null)); // ou outra mensagem personalizada
+                    .body(new UserDetail("User already registered", null));
         }
         userService.registerNewUser(user.email(), user.name());
-
         UserDetail userDetail = new UserDetail(user.name(), user.dogs());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userDetail);
@@ -91,12 +97,10 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         boolean isDeleted = userService.deleteUser(id);
         if (isDeleted) {
-            // Redireciona para a página de sucesso após a exclusão
             return ResponseEntity.status(302)
                     .header("Location", "/custom_login.html")
                     .build();
         }
-        // Se o usuário não for encontrado ou não for excluído, pode retornar um código 404
         return ResponseEntity.notFound().build();
     }
 

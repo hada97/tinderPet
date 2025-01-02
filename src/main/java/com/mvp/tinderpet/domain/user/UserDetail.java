@@ -8,4 +8,6 @@ public record UserDetail(
         @NotBlank String name,
 
         Set<Dog> dogs
-) {}
+) {
+
+}

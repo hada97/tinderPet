@@ -32,7 +32,7 @@ public class DogDto {
 
     private String description;
 
-    @NotNull(message = "A informação de castração é obrigatória")
+    @NotNull
     private boolean isNeutered;
 
 }

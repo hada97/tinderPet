@@ -49,7 +49,7 @@ public class DogController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Dog> updateDog(@Valid @PathVariable Long id, @RequestBody Dog dog) {
+    public ResponseEntity<Dog> updateDog(@Valid @PathVariable Long id, @RequestBody DogUpdateDto dog) {
         Dog updatedDog = dogService.updateDog(id, dog);
         if (updatedDog != null) {
             return new ResponseEntity<>(updatedDog, HttpStatus.OK);

@@ -1,6 +1,6 @@
 package com.mvp.tinderpet.domain.dog;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;  // Importar para evitar a serialização recursiva
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mvp.tinderpet.domain.like.Like;
 import com.mvp.tinderpet.domain.user.User;
 import jakarta.persistence.*;
@@ -43,12 +43,12 @@ public class Dog {
 
     private String description;
 
-    @NotNull(message = "A informação de castração é obrigatória")
+    @NotNull
     private boolean isNeutered;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")  // Coluna que faz a chave estrangeira
-    @JsonIgnore  // Evita que o usuário seja serializado ao serializar o Dog
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "dog", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -56,15 +56,12 @@ public class Dog {
 
 
     public void addLike(Like like) {
-        if (!this.likes.contains(like)) {
-            this.likes.add(like);
-        }
+        this.likes.add(like);
     }
 
     public void removeLike(Like like) {
         likes.remove(like);
-        like.setDog(null);  // Desassociar o like do cão
+        like.setDog(null);
     }
-
 
 }

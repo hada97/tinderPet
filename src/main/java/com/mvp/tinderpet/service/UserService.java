@@ -1,5 +1,7 @@
 package com.mvp.tinderpet.service;
 
+import com.mvp.tinderpet.domain.dog.DogDetail;
+import com.mvp.tinderpet.domain.user.UserUpdateDto;
 import com.mvp.tinderpet.repository.DogRepository;
 import com.mvp.tinderpet.domain.user.User;
 import com.mvp.tinderpet.domain.user.UserDetail;
@@ -11,6 +13,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,22 +43,18 @@ public class UserService {
     @Transactional
     @CacheEvict(value = "users", allEntries = true) // Invalid cache
     public void registerNewUser(String email, String name) {
-
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setName(name);
         User savedUser = userRepository.save(newUser);
-
         calculateCoordinates(savedUser);
-
         new UserDetail(
-                // id
-                savedUser.getName(), // name
-                savedUser.getDogs()  // dogs
+                savedUser.getName(),
+                savedUser.getDogs()
         );
     }
 
-    //calcular as coordenadas assíncrono
+
     @Async
     public void calculateCoordinates(User user) {
         double[] coordinates = geocodingService.geocode(user.getAddress());
@@ -73,7 +72,6 @@ public class UserService {
     public boolean deleteUser(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            // A exclusão de User com cascade vai automaticamente excluir os Dogs associados
             userRepository.delete(user.get());
             return true;
         }
@@ -82,11 +80,8 @@ public class UserService {
 
 
     public Long getUserIdByEmailFromGoogle() {
-        // Obtém o usuário autenticado
         OAuth2User oAuth2User = (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        // Pega o email do Google, assume que o atributo "email" está presente
         String email = oAuth2User.getAttribute("email");
-        // Verifica se o email é nulo
         if (email == null) {
             throw new NoSuchElementException("Email não encontrado");
         }
@@ -97,6 +92,20 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email) != null;
+    }
+
+    @Transactional
+    public void updateUser(UserUpdateDto data){
+        Long userId = getUserIdByEmailFromGoogle();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        user.setName(data.getName());
+        user.setAddress(data.getAddress());
+        user.setPhone(data.getPhone());
+        userRepository.save(user);
+
     }
 
 }

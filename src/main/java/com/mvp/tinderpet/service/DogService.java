@@ -3,14 +3,15 @@ package com.mvp.tinderpet.service;
 import com.mvp.tinderpet.domain.dog.Dog;
 import com.mvp.tinderpet.domain.dog.DogDetail;
 import com.mvp.tinderpet.domain.dog.DogDto;
+import com.mvp.tinderpet.domain.dog.DogUpdateDto;
 import com.mvp.tinderpet.repository.DogRepository;
 import com.mvp.tinderpet.domain.user.User;
 import com.mvp.tinderpet.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,27 +51,25 @@ public class DogService {
 
     public Dog getDogById(Long id) {
         return dogRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cão não encontrado com ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Dog not found - ID: " + id));
     }
 
     @Transactional
-    public DogDetail createDog(DogDto dados) {
-
+    public DogDetail createDog(DogDto data) {
         Long userId = userService.getUserIdByEmailFromGoogle();
-
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         if (user.getDogs().size() < 3) {
             Dog dog = new Dog();
-            dog.setName(dados.getName());
-            dog.setBreed(dados.getBreed());
-            dog.setAge(dados.getAge());
-            dog.setGender(dados.getGender());
-            dog.setSize(dados.getSize());
-            dog.setProfilePictureUrl(dados.getProfilePictureUrl());
-            dog.setDescription(dados.getDescription());
-            dog.setNeutered(dados.isNeutered());
+            dog.setName(data.getName());
+            dog.setBreed(data.getBreed());
+            dog.setAge(data.getAge());
+            dog.setGender(data.getGender());
+            dog.setSize(data.getSize());
+            dog.setProfilePictureUrl(data.getProfilePictureUrl());
+            dog.setDescription(data.getDescription());
+            dog.setNeutered(data.isNeutered());
             dog.setUser(user);
             dog.setLikes(null);
             dogRepository.save(dog);
@@ -79,15 +78,22 @@ public class DogService {
         } else {
             throw new IllegalStateException("Limite de 3 cães atingido.");
         }
-
     }
 
     @Transactional
     @CachePut(value = "dogs", key = "#id")
-    public Dog updateDog(Long id, Dog dog) {
-        Dog dogEntity = dogRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cão não encontrado com ID: " + id));
-        return dogRepository.save(dogEntity);
+    public Dog updateDog(@Valid Long id, DogUpdateDto data ) {
+        Dog dog = dogRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Dog not found - ID: " + id));
+
+        dog.setName(data.getName());
+        dog.setBreed(data.getBreed());
+        dog.setAge(data.getAge());
+        dog.setSize(data.getSize());
+        dog.setProfilePictureUrl(data.getProfilePictureUrl());
+        dog.setDescription(data.getDescription());
+
+        return dogRepository.save(dog);
     }
 
 
@@ -95,10 +101,11 @@ public class DogService {
     @CacheEvict(value = "dogs")
     public void deleteDog(Long id) {
         Dog dogEntity = dogRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cão não encontrado com ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Dog not found - ID: " + id));
         dogRepository.delete(dogEntity);
         ResponseEntity.noContent().build();
     }
+
 
     @Transactional
     @CacheEvict(value = "dogs")
