@@ -72,8 +72,7 @@ body {
   padding: 5px 0;
 }
 
-.dog__name,
-.dog__number {
+.dog__name {
   color: #3a444d;
   text-transform: capitalize;
 }
@@ -104,10 +103,9 @@ body {
   box-sizing: border-box;
 }
 
-
 .buttons {
   display: flex;
-  max-width: 220px;
+  max-width: 200px;
   justify-content: center;
   gap: 15px;
   margin-top: 20px;
@@ -117,24 +115,24 @@ body {
 .button,
 .add-form button {
   padding: 12px;
-  border-radius: 5px;
+  border-radius: 16px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: none;
 }
 
 .button {
   width: 100%;
-  border: 2px solid #000;
   color: white;
   background-color: #444;
-  box-shadow: -2px 3px 0 #222, -4px 6px 0 #000;
 }
 
 .button:hover {
   background-color: #555;
 }
+
 
 .button:active {
   box-shadow: inset -4px 4px 0 #222;
@@ -151,16 +149,6 @@ body {
   border-radius: 5px;
 }
 
-.add-form button {
-  border: 2px solid #000;
-  color: white;
-  background-color: #444;
-  box-shadow: -2px 3px 0 #222, -4px 6px 0 #000;
-}
-
-.add-form button:hover {
-  background-color: #7e7e7e;
-}
 
 .add-icon {
   width: 50px;

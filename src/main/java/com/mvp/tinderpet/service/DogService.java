@@ -121,5 +121,5 @@ public class DogService {
         Pageable pageable = PageRequest.of(page, size);
         return dogRepository.findByUserId(userId, pageable);
     }
-    
+
 }
