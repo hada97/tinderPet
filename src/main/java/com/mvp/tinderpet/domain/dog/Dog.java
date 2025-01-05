@@ -64,4 +64,10 @@ public class Dog {
         like.setDog(null);
     }
 
+    @Override
+    public String toString() {
+        // Retorna apenas informações simples, sem chamar o toString() do User
+        return "Dog{id=" + id + ", name='" + name + "'}";
+    }
+
 }

@@ -1,4 +1,4 @@
-## 💻 Sobre o Projeto Taxi Api
+## 💻 Sobre o Projeto Tinder PET
 
 [Veja como ficou em Produção!](https://taxi-docker-novo-djcscuapfpcvhkb6.canadacentral-01.azurewebsites.net)
 

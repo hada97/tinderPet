@@ -1,27 +1,24 @@
 package com.mvp.tinderpet.service;
 
-import com.mvp.tinderpet.domain.dog.Dog;
-import com.mvp.tinderpet.domain.dog.DogDetail;
-import com.mvp.tinderpet.domain.dog.DogDto;
-import com.mvp.tinderpet.domain.dog.DogUpdateDto;
-import com.mvp.tinderpet.repository.DogRepository;
+import com.mvp.tinderpet.domain.dog.*;
 import com.mvp.tinderpet.domain.user.User;
+import com.mvp.tinderpet.repository.DogRepository;
 import com.mvp.tinderpet.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.*;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class DogService {
@@ -72,6 +69,7 @@ public class DogService {
             dog.setNeutered(data.isNeutered());
             dog.setUser(user);
             dog.setLikes(null);
+            user.getDogs().add(dog);  // Adicionar o cão à coleção do usuário
             dogRepository.save(dog);
             userRepository.save(user);
             return new DogDetail(dog);
