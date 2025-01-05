@@ -142,7 +142,6 @@ public class DogServiceTest {
     }
 
 
-
     // Testando o método updateDog
     @Test
     void testUpdateDog_Success() {
