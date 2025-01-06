@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/index/favicon-16x16.png" />
-    <link rel="stylesheet" href="/index/style.css" />
-    <script defer src="/index/script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="/edit/favicon-16x16.png" />
+    <link rel="stylesheet" href="/edit/style.css" />
+    <script defer src="/edit/script.js"></script>
 
     <title>Dog</title>
 </head>
@@ -26,15 +27,15 @@
 
 <div class="main-container">
     <!-- Container lateral para adicionar um novo cachorro -->
-
     <div class="add-container">
+
         <div class="add-icon" id="addIcon">
-            <span>+</span>
+            <i class="fas fa-edit"></i>EDIT
         </div>
 
-        <div class="edit-form" id="editform" style="display: none">
+        <div class="add-form" id="addForm" style="display: none">
 
-            <h2 class="title-addform"><span>Edit User</span></h2>
+            <h2 class="title-addform"><span>User Info</span></h2>
 
             <form id="userForm">
                 <input
@@ -49,7 +50,7 @@
                         type="number"
                         id="phone"
                         name="phone"
-                        placeholder="Phone number"
+                        placeholder="Phone"
                 />
 
                 <input
@@ -63,13 +64,15 @@
             </form>
 
             <div class="add-form-control">
-                <button type="submit">Submit</button>
+                <button type="submit">Atualizar</button>
             </div>
 
         </div>
 
     </div>
 
+
+    </div>
 
     <div class="bottom-container">
         <p>© 2024 All rights reserved</p>

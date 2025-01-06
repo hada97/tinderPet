@@ -1,10 +1,27 @@
+
 let userId = null;
 
 const baseUrl = "http://localhost:8080";
+
 const token = localStorage.getItem("authToken");
+
+const dogName = document.querySelector(".dog__name");
+const dogNumber = document.querySelector(".dog__number");
+const dogImage = document.querySelector(".dog__image");
+const dogDescription = document.querySelector(".dog__description");
+const dogAge = document.querySelector(".dog__age");
+const dogBreed = document.querySelector(".dog__breed");
+const dogSize = document.querySelector(".dog__size");
+const dogGender = document.querySelector(".dog__gender");
+const dogNeutered = document.querySelector(".dog__neutered");
+const form = document.querySelector(".form");
+const input = document.querySelector(".input__search");
+const buttonPrev = document.querySelector(".btn-prev");
+const buttonNext = document.querySelector(".btn-next");
 const addIcon = document.getElementById("addIcon");
 const addForm = document.getElementById("addForm");
 const dogCard = document.querySelector(".dog-container");
+
 
 addIcon.addEventListener("click", () => {
   addIcon.style.display = "none";
@@ -12,7 +29,7 @@ addIcon.addEventListener("click", () => {
 });
 
 
-// Formulário para registrar um novo cachorro
+// Formulário para editar user
 document
   .getElementById("dogForm")
   .addEventListener("submit", async function (event) {
@@ -21,27 +38,25 @@ document
     const age = parseInt(document.getElementById("age").value);
     const breed = document.getElementById("breed").value;
 
-
     const token = localStorage.getItem("access_token");
 
     try {
-      const response = await fetch(baseUrl+ edit, {
-        method: "PATH",
+      const response = await fetch(baseUrl, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name,
-          phone number,
-          address,
-
+          age,
+          breed,
         }),
       });
 
       if (response.ok) {
-        alert("uSER successfully UPDATED!");
-        document.getElementById("EDITForm").reset();
+        alert("User successfully updated!");
+        document.getElementById("userForm").reset();
         addForm.style.display = "none";
         addIcon.style.display = "block";
         await loadDogsPage();
@@ -51,7 +66,7 @@ document
       }
     } catch (error) {
       alert(
-        "An error occurred while trying to register the USER " + error.message
+        "An error occurred while trying to update the user: " + error.message
       );
     }
   });
@@ -97,7 +112,7 @@ const fetchUserId = async () => {
 // Inicialização ao carregar o DOM
 document.addEventListener("DOMContentLoaded", async () => {
   const [userIdResult, dogsResult] = await Promise.all([
-    fetchUserId()
+    fetchUserId(),
+    loadDogsPage(),
   ]);
 });
-

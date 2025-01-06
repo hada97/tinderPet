@@ -26,6 +26,7 @@ const addIcon = document.getElementById("addIcon");
 const addForm = document.getElementById("addForm");
 const dogCard = document.querySelector(".dog-container");
 
+
 // Renderiza os detalhes do cachorro atual
 const renderCurrentDog = () => {
   if (dogsList.length > 0 && currentDogIndex < dogsList.length) {
@@ -47,8 +48,39 @@ const renderCurrentDog = () => {
     dogNeutered.innerHTML = `Neutered: ${dog.neutered ? "Yes" : "No"}`;
     dogImage.src = dog.profilePictureUrl;
     dogCard.setAttribute("data-id", dog.id);
+  } else {
+    const defaultDog = {
+      name: "Caramelo",
+      description: "",
+      age: 3,
+      breed: "Mixed",
+      size: "Medium",
+      gender: "Male",
+      neutered: false,
+      profilePictureUrl: "https://i.pinimg.com/originals/eb/ba/54/ebba54ccb826db148bf64821d1b16d69.png",
+      id: "default",
+    };
+
+    dogName.innerHTML = "Loading...";
+    dogDescription.innerHTML = "";
+    dogAge.innerHTML = "";
+    dogBreed.innerHTML = "";
+    dogSize.innerHTML = "";
+    dogGender.innerHTML = "";
+    dogNeutered.innerHTML = "";
+    dogImage.style.display = "block";
+    dogName.innerHTML = defaultDog.name;
+    dogDescription.innerHTML = `Description: ${defaultDog.description}`;
+    dogAge.innerHTML = `Age: ${defaultDog.age} years`;
+    dogBreed.innerHTML = `Breed: ${defaultDog.breed}`;
+    dogSize.innerHTML = `Size: ${defaultDog.size}`;
+    dogGender.innerHTML = `Gender: ${defaultDog.gender}`;
+    dogNeutered.innerHTML = `Neutered: ${defaultDog.neutered ? "Yes" : "No"}`;
+    dogImage.src = defaultDog.profilePictureUrl;
+    dogCard.setAttribute("data-id", defaultDog.id);
   }
 };
+
 
 // Busca os cachorros da página atual
 const fetchDogsPage = async (page, size) => {
