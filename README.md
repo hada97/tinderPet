@@ -56,7 +56,13 @@ Este projeto foi desenvolvido sob licenca MIT.
     mvn test
 
    
-5. Após iniciar a aplicação, acesse a interface do Swagger para visualizar os endpoints e interagir com a API:
+5. Após iniciar a aplicação, acesse a interface de login com Google:
+
+    ```bash
+    start http://localhost:8080
+
+
+6. Após iniciar a aplicação e fazer login, acesse o Swagger para visualizar todos endpoints da API:
 
     ```bash
     start http://localhost:8080/swagger-ui/index.html
