@@ -256,4 +256,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadDogsPage(),
   ]);
 });
-

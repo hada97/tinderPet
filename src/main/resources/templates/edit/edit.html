@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/index/favicon-16x16.png" />
+    <link rel="stylesheet" href="/index/style.css" />
+    <script defer src="/index/script.js"></script>
+
+    <title>Dog</title>
+</head>
+<body>
+<!-- Barra de navegação com o nome do usuário e botão de logout -->
+<header>
+    <nav>
+        <ul>
+            <li><a href="/index">Home</a></li>
+            <li><a href="/profile">Perfil</a></li>
+            <li>
+                <span id="user-name"></span>
+            </li>
+            <li><button onclick="logout()">Sair</button></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="main-container">
+    <!-- Container lateral para adicionar um novo cachorro -->
+
+    <div class="add-container">
+        <div class="add-icon" id="addIcon">
+            <span>+</span>
+        </div>
+
+        <div class="edit-form" id="editform" style="display: none">
+
+            <h2 class="title-addform"><span>Edit User</span></h2>
+
+            <form id="userForm">
+                <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        maxlength="24"
+                        placeholder="Name"
+                />
+
+                <input
+                        type="number"
+                        id="phone"
+                        name="phone"
+                        placeholder="Phone number"
+                />
+
+                <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        maxlength="24"
+                        placeholder="Address"
+                />
+
+            </form>
+
+            <div class="add-form-control">
+                <button type="submit">Submit</button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="bottom-container">
+        <p>© 2024 All rights reserved</p>
+    </div>
+
+    <div class="preloader hidden" id="preloader">
+        <div class="loader" id="loader"></div>
+    </div>
+</div>
+
+</body>
+</html>

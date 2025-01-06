@@ -1,24 +1,19 @@
 package com.mvp.tinderpet.service;
 
-import com.mvp.tinderpet.domain.dog.DogDetail;
-import com.mvp.tinderpet.domain.user.UserUpdateDto;
-import com.mvp.tinderpet.repository.DogRepository;
-import com.mvp.tinderpet.domain.user.User;
-import com.mvp.tinderpet.domain.user.UserDetail;
-import com.mvp.tinderpet.repository.UserRepository;
+
+import com.mvp.tinderpet.domain.user.*;
 import com.mvp.tinderpet.location.GeocodingService;
+import com.mvp.tinderpet.repository.DogRepository;
+import com.mvp.tinderpet.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.*;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 

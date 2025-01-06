@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 @EnableWebSecurity
 @SpringBootApplication
-public class TinderpetApplication {
+public class  TinderpetApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TinderpetApplication.class, args);

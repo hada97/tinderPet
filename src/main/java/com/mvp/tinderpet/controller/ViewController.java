@@ -20,7 +20,7 @@ public class ViewController {
 
     @GetMapping("/")
     public String login() {
-        return "custom_login";
+        return "login/custom_login";
     }
 
 
@@ -28,6 +28,12 @@ public class ViewController {
     public String index(OAuth2AuthenticationToken token, Model model) {
         model.addAttribute("name", token.getPrincipal().getAttribute("name"));
         return "index/index";
+    }
+
+    @GetMapping("/edit")
+    public String edit(OAuth2AuthenticationToken token, Model model) {
+        model.addAttribute("name", token.getPrincipal().getAttribute("name"));
+        return "edit/edit";
     }
 
     @GetMapping("/api/user/profile")
